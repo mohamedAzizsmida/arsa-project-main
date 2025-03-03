@@ -1,0 +1,130 @@
+<div class="container">
+    <div class="form-container">
+        <h1>Modifier l'utilisateur</h1>
+
+        <form method="POST" action="{{ path('admin_edit_user', {'idUser': user.id}) }}">
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" name="nom" value="{{ user.nom }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="tel" class="form-label">Téléphone</label>
+                <input type="tel" class="form-control" id="tel" name="tel" value="{{ user.tel }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="adress" class="form-label">Adresse</label>
+                <input type="text" class="form-control" id="adress" name="adress" value="{{ user.adress }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Rôle</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="roleUser" name="role" value="ROLE_USER"
+                        {% if user.role == 'ROLE_USER' %} checked {% endif %} required>
+                    <label class="form-check-label" for="roleUser">Utilisateur</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="roleAdmin" name="role" value="ROLE_ADMIN"
+                        {% if user.role == 'ROLE_ADMIN' %} checked {% endif %}>
+                    <label class="form-check-label" for="roleAdmin">Administrateur</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        </form>
+    </div>
+</div>
+
+
+<style>
+    /* Center everything in the page */
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    /* Style the form container */
+    .form-container {
+        max-width: 500px;
+        width: 100%;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: left;  /* Align form content to the left */
+    }
+
+    /* Title styles */
+    .form-container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+    }
+
+    /* Style form inputs */
+    .form-container input, 
+    .form-container select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    /* Radio buttons styling */
+    .form-check-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+    }
+
+    /* Style the submit button */
+    .form-container .btn-primary {
+        background-color: #32CD32;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .form-container .btn-primary:hover {
+        background-color: #28a745;
+    }
+
+    /* Make the button a little more interactive */
+    .form-container .btn-primary:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(50, 205, 50, 0.7);
+    }
+
+    /* Back link style */
+    .back-link {
+        margin-top: 20px;
+        text-align: center;
+        color: #007BFF;
+        text-decoration: none;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Add some margin to make it a bit more spacious */
+    .form-container .form-check {
+        margin-bottom: 10px;
+    }
+
+</style>

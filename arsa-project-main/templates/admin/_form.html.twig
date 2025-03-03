@@ -1,0 +1,84 @@
+{% extends 'Admin-base.html.twig' %}
+
+{% block title %}New User{% endblock %}
+
+{% block body %}
+    <style>
+        /* Center everything */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Style the form container */
+        .form-container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Style form inputs */
+        .form-container input, 
+        .form-container textarea, 
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Style the button */
+        .btn-save {
+            background-color: #32CD32;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-save:hover {
+            background-color: #28a745;
+        }
+
+        /* Align title */
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Align the back link */
+        .back-link {
+            margin-top: 15px;
+            text-align: center;
+            display: block;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="container">
+        <h1 class="title">Create new User</h1>
+
+        <div class="form-container">
+            {{ form_start(form, {'attr': {'class': 'form'}}) }}
+                {{ form_widget(form) }}
+                <button class="btn-save">{{ button_label|default('Save') }}</button>
+            {{ form_end(form) }}
+        </div>
+
+        <a href="{{ path('app_user_index') }}" class="back-link">Back to list</a>
+    </div>
+{% endblock %}

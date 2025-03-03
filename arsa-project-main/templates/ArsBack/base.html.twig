@@ -1,0 +1,40 @@
+{# templates/admin/base.html.twig #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+        <link rel="stylesheet" href="{{ asset('admin_assets/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin_assets/css/lineicons.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin_assets/css/materialdesignicons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin_assets/css/fullcalendar.css') }}">
+        <link rel="stylesheet" href="{{ asset('admin_assets/css/main.css') }}">
+        <script>
+        // Initialize Bootstrap dropdowns
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'))
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl)
+            });
+        });
+    </script>
+    {% endblock %}
+</head>
+<body>
+
+    {% block body %}
+    {% endblock %}
+    
+    {% block javascripts %}
+         {{ encore_entry_script_tags('app') }}
+        <script src="{{ asset('admin_assets/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('admin_assets/js/Chart.min.js') }}"></script>
+        <script src="{{ asset('admin_assets/js/dynamic-pie-chart.js') }}"></script>
+        <script src="{{ asset('admin_assets/js/main.js') }}"></script>
+    {% endblock %}
+</body>
+</html>

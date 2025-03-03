@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta %}{% endblock %}
+    <title>{% block title %}{% endblock %}EcoDon</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {# Google Font #}
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    {# CSS Styles #}
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/elegant-icons.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/nice-select.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/owl.carousel.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/slicknav.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" type="text/css">
+    <style>
+    .chat-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .chat-toggle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #7fad39;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .chat-toggle:hover {
+        transform: scale(1.1);
+    }
+    
+     .chatbox {
+        display: none;
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 300px;
+        height: 400px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        flex-direction: column;
+    }
+
+    .chat-header {
+        background: #7fad39;
+        color: white;
+        padding: 10px;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chat-header h5 {
+        margin: 0;
+    }
+    .chat-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .chat-messages {
+        flex-grow: 1;
+        padding: 10px;
+        overflow-y: auto;
+        max-height: 300px;
+    }
+
+    .message {
+        margin: 8px 0;
+        padding: 8px 12px;
+        border-radius: 15px;
+        max-width: 80%;
+    }
+
+    .message.bot {
+        background: #f0f0f0;
+        margin-right: auto;
+    }
+    .message.user {
+        background: #7fad39;
+        color: white;
+        margin-left: auto;
+    }
+
+    .chat-input {
+        padding: 10px;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 10px;
+    }
+
+    .chat-input input {
+        flex-grow: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+    }
+
+    .chat-input button {
+        background: #7fad39;
+        border: none;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    .show-chat {
+        display: flex !important;
+    }
+    .message.loading {
+    background: #f0f0f0;
+    color: #666;
+    font-style: italic;
+}
+
+.message.loading::after {
+    content: '';
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+.subscription-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+.subscription-message.success {
+    display: block;
+    background-color: #7fad39;
+    color: white;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.subscribe-loader {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.site-btn.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 110px;
+}
+</style>
+    
+    
+    
+
+</head>
+<body>
+    <!-- Page Preloder -->
+        <div id="preloder">
+            <div class="loader"></div>
+        </div>
+
+    <!-- Version Mobile -->
+    <div class="humberger__menu__overlay"></div>
+    <div class="humberger__menu__wrapper">
+        <div class="humberger__menu__logo">
+            <a href="#"><img src="img/logo.png" alt=""></a>
+        </div>
+        <div class="humberger__menu__cart">
+            <ul>
+                <li><a href="#"><i class="fa fa-heart"></i> <span>12</span></a></li>
+                <li ><a href="{{path('app_panier')}}"><i class="fa fa-shopping-bag"></i> <span>{{ cartItemCount|default(0) }}</span></a></li>
+            </ul>
+            <div class="header__cart__price">item: <span>${{ cartTotal|default(0)|number_format(2, '.', ',') }}</span></div>
+        </div>
+        <div class="humberger__menu__widget">
+            <div class="header__top__right__language">
+                <img src="img/language.png" alt="">
+                <div>English</div>
+                <span class="arrow_carrot-down"></span>
+                <ul>
+                    <li><a href="#">Spanis</a></li>
+                    <li><a href="#">English</a></li>
+                </ul>
+            </div>
+            <div class="header__top__right__auth">
+                <a href="#"><i class="fa fa-user"></i> Login</a>
+            </div>
+        </div>
+        <nav class="humberger__menu__nav mobile-menu">
+            <ul>
+
+                <li><a href="{{path('app_test')}}">Home</a></li>
+                <li><a href="{{path('app_eventspage')}}">Events</a></li>
+                <li><a href="{{path('app_contact')}}">Contact</a></li>
+                <li><a href="{{ path('app_formation_index_user') }}">Formation</a></li>
+                <li><a href="{{ path('app_cour_index_user') }}">Cours</a></li>
+
+                
+                               <!-- <li><a href="./shop-grid.html">Shop</a></li>
+                <li><a href="#">Pages</a>
+                    <ul class="header__menu__dropdown">
+                        <li><a href="./shop-details.html">Shop Details</a></li>
+                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                        <li><a href="./checkout.html">Check Out</a></li>
+                        <li><a href="./blog-details.html">Blog Details</a></li>
+                    </ul>
+                </li>
+                <li><a href="./blog.html">Blog</a></li> -->
+            </ul>
+        </nav>
+        <div id="mobile-menu-wrap"></div>
+        <div class="header__top__right__social">
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <a href="#"><i class="fa fa-pinterest-p"></i></a>
+        </div>
+        <div class="humberger__menu__contact">
+            <ul>
+                <li><i class="fa fa-envelope"></i> contact@EcoDon.com</li>
+                <li>Donate and save the planet!Only 0.99$</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Version Mobile -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__left">
+                            <ul>
+                                <li><i class="fa fa-envelope"></i> contact@EcoDon.com</li>
+                                <li>Donate and save the planet!Only 0.99$</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="header__top__right">
+                            <div class="header__top__right__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                            </div>
+                            <div class="header__top__right__language">
+                                <img src="img/language.png" alt="">
+                                <div>English</div>
+                                <span class="arrow_carrot-down"></span>
+                                <ul>
+                                    <li><a href="#">Spanis</a></li>
+                                    <li><a href="#">English</a></li>
+                                </ul>
+                            </div>
+                            <div class="header__top__right__auth">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fa fa-user"></i> Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="{{path('app_eventspage')}}"><img src="{{ asset('img/ecodon.png') }}" alt="" width="119" height="50"></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                        
+                            <li class="{{events_active | default('')}}"><a href="{{path('app_eventspage')}}">Events</a></li>
+                            <li class="{{contact_active | default('')}}"><a href="{{path('app_contact')}}">Contact</a></li>
+                            <li><a href="{{ path('app_formation_index_user') }}">Formation</a></li>
+                            <li><a href="{{ path('app_cour_index_user') }}">Cours</a></li>
+                            <li><a href="{{ path('app_post_front') }}">Blog</a></li>
+                            
+                                                        <!--<li><a href="./shop-grid.html">Shop</a></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="header__menu__dropdown">
+                                    <li><a href="./shop-details.html">Shop Details</a></li>
+                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                                    <li><a href="./checkout.html">Check Out</a></li>
+                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="./blog.html">Blog</a></li>-->
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-heart"></i> <span>9</span></a></li>
+                            <li ><a href="{{path('app_panier')}}"><i class="fa fa-shopping-bag"></i> <span>{{ cartItemCount|default(0) }}</span></a></li>
+                        </ul>
+                        <div class="header__cart__price">item: <span>${{ cartTotal|default(0)|number_format(2, '.', ',') }}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
+    <!-- Header Section End -->
+
+    
+    {% block body %}{% endblock %}
+    <!-- Footer Section Begin -->
+    <footer class="footer spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="footer__about">
+                        <div class="footer__about__logo">
+                            <a href="{{path('app_eventspage')}}"><img src="{{ asset('img/ecodon.png') }}" alt="" width="119" height="50"></a>
+                        </div>
+                        <ul>
+                            <li>Address: Les Bérges de Lac 2 ,Tunisa</li>
+                            <li>Phone: +216 29 422 403</li>
+                            <li>Email: contact@EcoDon.com</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6 offset-lg-1">
+                    <div class="footer__widget">
+                        <h6>Useful Links</h6>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">About Our Parteners</a></li>
+                            <li><a href="#">Secure Donation</a></li>
+                            <li><a href="#">Delivery infomation</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Our Sitemap</a></li>
+                        </ul>
+                        <ul>
+                            <li><a href="#">Who We Are</a></li>
+                            <li><a href="#">Our Services</a></li>
+                            <li><a href="#">Projects</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Innovation</a></li>
+                            <li><a href="#">Testimonials</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="footer__widget">
+                        <h6>Join Our Newsletter Now</h6>
+                        <p>Get E-mail updates about our latest Events and Donation offers.</p>
+                        <form id="newsletterForm" onsubmit="return handleSubscribe(event)">
+                            <input type="email" id="subscriberEmail" placeholder="Enter your mail" required>
+                            <button type="submit" class="site-btn">Subscribe</button>
+                        </form>
+                        <div id="subscriptionMessage" class="subscription-message"></div>
+                        <div class="footer__widget__social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-pinterest"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer__copyright">
+                        <div class="footer__copyright__text"><p>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made by <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://www.haffarmedsadok.me" target="_blank">EcoDon</a>
+  </p></div>
+                        <div class="footer__copyright__payment"><img src="img/payment-item.png" alt=""></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+    
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.slicknav.js') }}"></script>
+    <script src="{{ asset('js/mixitup.min.js') }}"></script>
+    <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+
+    {% block javascripts %}{% endblock %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginButton = document.getElementById('loginButton');
+        const associationSelect = document.getElementById('associationSelect');
+
+        loginButton.addEventListener('click', function() {
+            const selectedAssociationId = associationSelect.value;
+            if (selectedAssociationId) {
+                window.location.href = `/association/login?associationId=${encodeURIComponent(selectedAssociationId)}`;
+            } else {
+                alert('Please select an association to login.');
+            }
+        });
+    });
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatToggle = document.getElementById('chatToggle');
+            const chatbox = document.getElementById('chatbox');
+            const chatClose = document.getElementById('chatClose');
+            const userInput = document.getElementById('userInput');
+            const sendMessage = document.getElementById('sendMessage');
+            const chatMessages = document.getElementById('chatMessages');
+
+            
+            chatToggle.addEventListener('click', () => {
+                chatbox.classList.toggle('show-chat');
+            });
+
+            chatClose.addEventListener('click', () => {
+                chatbox.classList.remove('show-chat');
+            });
+
+            
+            async function sendUserMessage() {
+                const message = userInput.value.trim();
+                if (message) {
+                    
+                    appendMessage('user', message);
+                    userInput.value = '';
+                    
+                    
+                    const loadingDiv = document.createElement('div');
+                    loadingDiv.classList.add('message', 'bot', 'loading');
+                    loadingDiv.textContent = 'Typing...';
+                    chatMessages.appendChild(loadingDiv);
+
+                    try {
+                        const botResponse = await getBotResponse(message);
+                        chatMessages.removeChild(loadingDiv);
+                        appendMessage('bot', botResponse);
+                    } catch (error) {
+                        chatMessages.removeChild(loadingDiv);
+                        appendMessage('bot', 'Sorry, something went wrong. Please try again.');
+                    }
+                }
+            }
+
+            
+            sendMessage.addEventListener('click', sendUserMessage);
+
+            
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendUserMessage();
+                }
+            });
+
+           
+            function appendMessage(sender, message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', sender);
+                messageDiv.textContent = message;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            
+
+            async function getBotResponse(message) {
+                try {
+                    const response = await fetch('/chat/send', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({ message: message })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.status === 429) {
+                        return "I'm receiving too many requests right now. Please wait a moment and try again.";
+                    }
+                    
+                    if (!response.ok) {
+                        throw new Error(data.message || 'Network response was not ok');
+                    }
+                    
+                    if (data.success) {
+                        return data.message;
+                    } else {
+                        throw new Error(data.message || 'API Error');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    return "Sorry, I encountered an error. Please try again in a moment.";
+                }
+            }
+        });
+    </script>
+    
+<div class="chat-widget">
+        <button id="chatToggle" class="chat-toggle">
+            <i class="fa fa-comments"></i>
+        </button>
+        
+        <div id="chatbox" class="chatbox">
+            <div class="chat-header">
+                <h5>EcoDon Assistant</h5>
+                <button id="chatClose" class="chat-close">×</button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    Hello! 👋 How can I help you with your donation today?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Type your message...">
+                <button id="sendMessage">
+                    <i class="fa fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="associationSelect" class="form-label">Select Association</label>
+                            <select class="form-select" id="associationSelect" required>
+                                <option value="" disabled selected>Select your association</option>
+                                {% for association in associations %}
+                                    <option value="{{ association.id }}">{{ association.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="loginButton">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginButton = document.getElementById('loginButton');
+            const associationSelect = document.getElementById('associationSelect');
+
+            loginButton.addEventListener('click', function() {
+                const selectedAssociationId = associationSelect.value;
+                if (selectedAssociationId) {
+                    window.location.href = `/association/login?associationId=${encodeURIComponent(selectedAssociationId)}`;
+                } else {
+                    alert('Please select an association to login.');
+                }
+            });
+        });
+</script>
+
+    <script>
+    
+
+
+        async function handleSubscribe(event) {
+        event.preventDefault();
+        const emailInput = document.getElementById('subscriberEmail');
+        const submitButton = event.target.querySelector('button');
+        const messageDiv = document.getElementById('subscriptionMessage');
+        
+        const originalText = submitButton.innerHTML;
+        
+        try {
+            submitButton.disabled = true;
+            submitButton.classList.add('loading');
+            submitButton.innerHTML = '<div class="subscribe-loader"></div>';
+            messageDiv.className = 'subscription-message';
+            
+            const response = await fetch('/subscribe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: emailInput.value })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                messageDiv.textContent = '✅ ' + data.message;
+                messageDiv.classList.add('success');
+                emailInput.value = '';
+            } else {
+                messageDiv.textContent = '❌ ' + data.message;
+                messageDiv.classList.add('error');
+            }
+            
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+            
+        } catch (error) {
+            messageDiv.textContent = '❌ An error occurred. Please try again.';
+            messageDiv.classList.add('error');
+            messageDiv.style.display = 'block';
+        } finally {
+            submitButton.disabled = false;
+            submitButton.classList.remove('loading');
+            submitButton.innerHTML = originalText;
+        }
+        
+        return false;
+    }
+    </script>
+
+</body>
+</html>

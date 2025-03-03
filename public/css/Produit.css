@@ -1,0 +1,105 @@
+
+.cltbtnAddPr{
+    margin-bottom: 4em !important;
+    float: right;
+}
+    
+        /* Style général des erreurs */
+    .error-message {
+        color: #ff0000;
+        font-size: 14px;
+        margin-top: 5px;
+        font-weight: bold;
+    }
+    
+    /* Ajouter un contour rouge aux champs invalides */
+    .form-control.is-invalid {
+        border: 2px solid #ff0000;
+        background-color: #ffe6e6;
+    }
+    
+    /* Ajouter un effet pour les champs focus avec erreur */
+    .form-control.is-invalid:focus {
+        border-color: #cc0000;
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+    }
+ .invalid-feedback li   {
+        list-style: none;
+    }
+    .invalid-feedback    {
+        display: inline-flex !important       ;
+    }
+    .checkout__form .alert-success{
+        height: fit-content !important;
+        
+    margin-top: 3em;
+
+    }
+    #imagePreview {
+        margin-top: 20px;
+        text-align: center;
+        border: 1px solid #ddd; /* Optional: Adds a border around the preview */
+        padding: 10px;
+        /* max-width: 100%; */
+        width: 209px; /* Ensures it takes up full width of the parent container */
+        background-color: #f9f9f9; /* Optional: Adds a light background */
+    }
+    
+    #imagePreview img {
+        max-width: 100%; /* Ensures the image is responsive */
+        height: auto;    /* Maintains the aspect ratio */
+        border-radius: 5px; /* Optional: Adds rounded corners */
+    }
+    .return-btn {background-color:#ce9d0abf !important;
+    color: white;}
+   .product-quantity .pro-qty{
+        display: ruby-text;
+    width: auto;
+    padding: 6px;
+    }
+
+    .viewCart .primary-btn{
+        pointer-events: auto;
+    cursor: pointer;
+
+    }
+
+    .stat-card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin: 10px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+    
+    .stat-card h3 {
+        font-size: 18px;
+        color: #333;
+    }
+    
+    .stat-card p {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007bff;
+    }
+    .table .thead-dark th{
+        background-color: #28a745a6;  
+    }
+    .stat{
+        font-size: 10px !important;
+    }
+    .stat h2{
+        font-size: 26px;
+    }
+    .productSection{
+        padding-top: 50px;
+        padding-bottom: 50px;
+
+    }
+    .productSection li.active
+    {
+     font-weight: bold;   
+    }
+    .containerAdminprod{
+        background: white;
+    }

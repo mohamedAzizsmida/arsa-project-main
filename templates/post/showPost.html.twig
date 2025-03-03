@@ -1,0 +1,79 @@
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}Post Details{% endblock %}
+
+{% block body %}
+    <div class="post-container">
+        <h1 class="post-title">{{ post.contenu }}</h1>
+        <p class="post-date">📅 Published on: {{ post.datePublication|date('Y-m-d') }}</p>
+
+        <div class="post-image">
+            {% if post.image %}
+                <img src="{{ asset('uploads/' ~ post.image) }}" alt="Post Image">
+            {% else %}
+                <p class="no-image">No image available.</p>
+            {% endif %}
+        </div>
+
+        <div class="qr-code-link">
+            <a href="{{ path('app_post_qrcode', {'id': post.id}) }}" class="btn-generate">Generate QR Code</a>
+        </div>
+    </div>
+
+    <style>
+        .post-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .post-date {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .post-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .no-image {
+            font-size: 16px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .qr-code-link {
+            margin-top: 20px;
+        }
+
+        .btn-generate {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #45a049;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-generate:hover {
+            background-color: #3e9143;
+        }
+    </style>
+{% endblock %}

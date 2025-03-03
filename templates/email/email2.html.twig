@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Our Community!</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #28a745; text-align: center;">Welcome to Our Community, {{ user.nom }}!</h1>
+        
+        <p>Dear {{ user.nom }},</p>
+        
+        <p>Thank you for joining us! We’re excited to have you as part of our community.</p>
+        
+        <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <h3 style="color: #28a745;">Your Account Details:</h3>
+            <p>Name: {{ user.nom }}</p>
+            <p>Email: {{ user.email }}</p>
+            <p>Phone Number: {{ user.tel }}</p>
+            <p>Join Date: {{ "now"|date("F d, Y") }}</p>
+        </div>
+        
+        <p>We are excited to have you with us and look forward to engaging with you in the future. If you have any questions or need assistance, feel free to reach out!</p>
+        
+        <p>Best regards,<br>Your Community Team</p>
+    </div>
+</body>
+</html>

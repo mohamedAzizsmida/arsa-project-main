@@ -1,0 +1,98 @@
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}Panier{% endblock %}
+
+{% block body %}
+    <!-- Section de la barre de navigation -->
+    <section class="breadcrumb-section set-bg" data-setbg="{{asset('img/breadcrumb.jpg')}}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Panier</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section de la barre de navigation fin -->
+
+<div class="container viewCart">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="shoping__cart__table">
+                <form action="{{ path('update_cart') }}" method="post">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="shoping__product">Produits</th>
+                                <th>Quantité</th>
+                                <th></th>
+                                   <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in products %}
+                                <tr>
+                                    <td class="shoping__cart__item">
+                                        <img src="{{ asset('uploadsImageProduit/' ~ item.product.image) }}" alt="" width="100">
+                                        <h5>{{ item.product.nom }}</h5>
+                                       
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <div class="pro-qty">
+                                                <input type="number" name="quantities[{{ item.product.idProduit }}]" value="{{ item.quantity }}" min="1"  max="{{ item.product.quantiteReelle }}"> {# Set max to available stock #}
+   
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p><strong>Stock disponible :</strong> {{ item.product.quantiteReelle }}</p> {# Display available stock #}
+            
+                                    </td>
+                                    <td class="shoping__cart__item__close">
+                                        <a href="{{ path('remove_from_cart', { 'id': item.product.idProduit }) }}">
+                                            <span class="icon_close"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">Votre panier est vide.</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="shoping__cart__btns">
+                        <button type="submit" class="primary-btn cart-btn cart-btn-right">
+                           Mettre à jour le panier
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-end">
+        <div class="col-lg-6">
+            <div class="shoping__checkout">
+                <h5>Résumé</h5>
+                <ul>
+                    <li>Total <span>{{ products|length }} articles</span></li>
+                </ul>
+                <div style="display:ruby-text">
+               <form action="{{ path('finaliser_commande') }}" method="post">
+    <button type="submit" class="primary-btn">Finaliser la commande</button>
+</form>
+              <!-- New button to continue shopping next to "Mettre à jour le panier" -->
+                        <a href="{{ path('app_association') }}" class="primary-btn  cart-btn-right return-btn">
+                            Continuer mes achats
+                        </a>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

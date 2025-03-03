@@ -1,0 +1,322 @@
+﻿{% extends 'baseMainEntreprise.html.twig' %}
+
+{% block title %}Statistiques Utilisateur{% endblock %}
+
+{% block body %}
+<section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb.jpg') }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Home</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container stat">
+    <div class="col-12 col-md order-md-0 text-md-start mt-5 mb-2">
+        <h2>Statistiques de vos Dons</h2>
+    </div>
+    <div class="row col-md-12">
+        <div class="col-md-3">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <span class="card-title">Total Quantités Produits</span>
+                    <p class="card-text text-primary fs-4">{{ totalQuantities }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <span class="card-title">Total des produits donnés</span>
+                    <p class="card-text text-primary fs-4">{{ totalProduitsDonnes }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <span class="card-title">Produits non distribués</span>
+                    <p class="card-text text-danger fs-4">{{ produitsNonDistribues }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <span class="card-title">Produits totalement distribués</span>
+                    <p class="card-text text-success fs-4">{{ totalProduitsDistribues }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-md-12 mt-3">
+        <div class="col-md-6">
+            <h2>Top 5 Produits les plus commandés</h2>
+            <table class="table m-3">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité commandée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in topOrderedProducts %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.totalOrdered }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Top 5 Produits les moins commandés</h2>
+            <table class="table m-3">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité commandée</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in topLeastOrderedProducts %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.totalOrdered }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+       {# <h1>Variation des demandes des produits</h1>
+
+    <canvas id="variationDemandesChart" width="400" height="200"></canvas>#}
+       
+    </div>
+<div class="row col-md-12">
+    <div class="col-md-6">
+            <h2 class="">Produits donnés par mois</h3>
+            <canvas id="produitsParMoisChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h2 class="">Répartition des dons par catégorie</h3>
+            <canvas id="repartitionDonsChart"></canvas>
+        </div>
+    </div>
+       <div class="row col-md-12">
+        <h2 class="text-center mb-4">Quantité de Produits Donnés par Mois et Catégorie</h2>
+        <div class="row col-md-12">
+            <div class="col-md-12">
+                <canvas id="groupedBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  
+        
+     
+{#
+// Fonction pour générer une couleur hexadécimale aléatoire
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+var ctxVariationDemandes = document.getElementById('variationDemandesChart').getContext('2d');
+
+// Données pour le graphique de la variation des demandes
+var variationDemandesData = {
+    labels: {{ variationDemandes|map(row => row.mois)|json_encode|raw }},
+    datasets: [
+        {% for produit in topOrderedProducts %}
+            {
+                label: '{{ produit.name }}',
+                data: [
+                    {% for month in variationDemandes %}
+                        {% if month.produit == produit.name %}
+                            {{ month.quantite_restante  }},
+                        {% endif %}
+                    {% endfor %}
+                ],
+                borderColor: getRandomColor(), // Générer une couleur aléatoire pour chaque produit
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+                tension: 0.4
+            },
+        {% endfor %}
+    ]
+};
+
+// Création du graphique avec Chart.js
+new Chart(ctxVariationDemandes, {
+    type: 'line',
+    data: variationDemandesData,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Mois'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Nombre de Commandes'
+                },
+                beginAtZero: true
+            }
+        }
+    }
+});
+#}
+
+    // Data for the line chart (Products Donated by Month)
+ var produitsParMoisData = {
+        labels: {{ produitsParMois|map(p => p.mois)|json_encode|raw }},
+        datasets: [{
+            label: 'Produits donnés par mois',
+            data: {{ produitsParMois|map(p => p.count)|json_encode|raw }},
+            borderColor: '#36a2eb',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            fill: true,
+            tension: 0.4
+        }]
+    };
+
+    var ctxMois = document.getElementById('produitsParMoisChart').getContext('2d');
+    new Chart(ctxMois, {
+        type: 'line',
+        data: produitsParMoisData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + " produits";
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois',
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Nombre de produits donnés',
+                        font: {
+                            weight: 'bold'
+                        }
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Data for the pie chart (Donations by Category)
+    var donationsParCategorieData = {
+        labels: {{ donationsByCategory|map(c => c.category)|json_encode|raw }},
+        datasets: [{
+            label: 'Répartition des dons par catégorie',
+            data: {{ donationsByCategory|map(c => c.count)|json_encode|raw }},
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#FF9F40'],
+            hoverOffset: 4
+        }]
+    };
+
+    var ctxCategories = document.getElementById('repartitionDonsChart').getContext('2d');
+    new Chart(ctxCategories, {
+        type: 'pie',
+        data: donationsParCategorieData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.raw + " produits";
+                        }
+                    }
+                }
+            }
+        }
+    });
+    const ctx = document.getElementById('groupedBarChart').getContext('2d');
+    const groupedBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ months|json_encode|raw }},
+            datasets: {{ datasets|json_encode|raw }}
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + ' produits';
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Quantité de produits donnés'
+                    },
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

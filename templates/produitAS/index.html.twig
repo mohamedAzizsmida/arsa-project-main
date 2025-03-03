@@ -1,0 +1,187 @@
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}EcoDon - Détails du Produit{% endblock %}
+
+{% block body %}
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{{asset('img/breadcrumb.jpg')}}"> 
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>EcoDon Stock</h2>
+                        <div class="breadcrumb__option">
+                            <a href="./index.html">Home</a>
+                            <span>Stock</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Product Section Begin -->
+    <section class="productSection">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-5">
+                    <div class="sidebar">
+                        <!-- Type d'Entreprise Filter -->
+                        <div class="sidebar__item">
+                            <h4>Type d'Entreprise</h4>
+                            <ul>
+                                <li class="{% if typeEntrepriseFilter is null %}active{% endif %}">
+                                    <a href="{{ path('app_association') }}">Tous les Types</a>
+                                </li>
+
+                                {% for typeEntreprise in distinctTypeEntreprises %}
+                                    <li class="{% if typeEntrepriseFilter == typeEntreprise.typeentreprise %}active{% endif %}">
+                                        <a href="{{ path('app_association', { 
+                                            'typeentreprise_filter': typeEntreprise.typeentreprise, 
+                                            'quantity_filter': quantityFilter, 
+                                            'date_filter': dateFilter,
+                                            'categorie_id': categorieId 
+                                        }) }}">
+                                            {{ typeEntreprise.typeentreprise }}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li>Aucun type disponible.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Catégories Filter -->
+                        <div class="sidebar__item">
+                            <h4>Catégories</h4>
+                            <ul>
+                                <li class="{% if categorieId is null %}active{% endif %}">
+                                    <a href="{{ path('app_association', { 
+                                        'typeentreprise_filter': typeEntrepriseFilter, 
+                                        'quantity_filter': quantityFilter, 
+                                        'date_filter': dateFilter 
+                                    }) }}">Tous les produits</a>
+                                </li>
+
+                                {% for categorie in categories %}
+                                    <li class="{% if categorie.id == categorieId %}active{% endif %}">
+                                        <a href="{{ path('app_association', { 
+                                            'categorie_id': categorie.id, 
+                                            'typeentreprise_filter': typeEntrepriseFilter, 
+                                            'quantity_filter': quantityFilter, 
+                                            'date_filter': dateFilter 
+                                        }) }}">
+                                            {{ categorie.nom }}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li>Aucune catégorie disponible.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-7">
+                    <div class="product__list">
+                        <div class="section-title">
+                            <h2>Produits</h2>
+                        </div>
+                    </div>
+                    <div class="filter__item">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-5">
+                                <div class="filter__sort">
+                                    <span>Quantité</span>
+                                    <select id="quantityFilter" class="form-control" onchange="applyFilters()">
+                                        <option value="all" {% if quantityFilter is not defined or quantityFilter == 'all' %}selected{% endif %}>Tous</option>
+                                        <option value="small" {% if quantityFilter == 'small' %}selected{% endif %}>Petite quantité (moins de 10)</option>
+                                        <option value="medium" {% if quantityFilter == 'medium' %}selected{% endif %}>Moyenne quantité (10 - 100)</option>
+                                        <option value="large" {% if quantityFilter == 'large' %}selected{% endif %}>Grande quantité (plus de 100)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-5">
+                                <div class="filter__sort">
+                                    <span>Date d'Ajout</span>
+                                    <select id="dateFilter" class="form-control" onchange="applyFilters()">
+                                        <option value="all" {% if dateFilter is not defined or dateFilter == 'all' %}selected{% endif %}>Tous</option>
+                                        <option value="last_week" {% if dateFilter == 'last_week' %}selected{% endif %}>Ajoutés cette semaine</option>
+                                        <option value="last_month" {% if dateFilter == 'last_month' %}selected{% endif %}>Ajoutés ce mois-ci</option>
+                                        <option value="last_3_months" {% if dateFilter == 'last_3_months' %}selected{% endif %}>Ajoutés ces 3 derniers mois</option>
+                                        <option value="last_6_months" {% if dateFilter == 'last_6_months' %}selected{% endif %}>Ajoutés ces 6 derniers mois</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="filter__found">
+                                    <h6><span>{{ produits|length }}</span> Produits</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        {% for produit in produits %}
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="product__item">
+                                    <div class="product__item__pic set-bg" data-setbg="{{ asset('uploadsImageProduit/' ~ produit.image) }}">
+                                        <ul class="product__item__pic__hover">
+                                            <li>
+                                                <a href="{{ path('select_quantity', { 'id': produit.idProduit }) }}">
+                                                    <i class="fa fa-shopping-cart"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="product__item__text">
+                                        <p> {{ produit.categorie.nom }}</p> <!-- Affichage de la catégorie -->
+                                        <h6><a href="#">{{ produit.nom }}</a></h6>
+                                        <p>Quantité disponible : {{ produit.quantiteReelle }}</p> <!-- Affichage de la quantité -->
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p>Aucun produit disponible.</p>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
+
+  <script>
+   // Apply filters (quantity, date, typeEntreprise) by changing the URL with all selected filters
+function applyFilters() {
+    // Function to decode HTML entities
+function decodeHTML(str) {
+    var doc = new DOMParser().parseFromString(str, 'text/html');
+    return doc.documentElement.textContent;
+}
+    var quantityFilterValue = document.getElementById('quantityFilter').value;
+    var dateFilterValue = document.getElementById('dateFilter').value;
+    
+    // Get the values from the Twig variables, or fallback to 'null' if not defined
+    var typeEntrepriseFilterValue = "{{ typeEntrepriseFilter is not null ? typeEntrepriseFilter : '' }}";
+    var categorieIdValue = "{{ categorieId is not null ? categorieId : '' }}";
+    
+    // Encode the values to ensure they are URL-safe (handle spaces and special characters)
+    typeEntrepriseFilterValue = encodeURIComponent(decodeHTML(typeEntrepriseFilterValue));
+    categorieIdValue = encodeURIComponent(categorieIdValue);
+    
+    // Construct the URL with the selected filters
+    var url = "{{ path('app_association') }}?quantity_filter=" + quantityFilterValue 
+              + "&date_filter=" + dateFilterValue
+              + (typeEntrepriseFilterValue ? "&typeentreprise_filter=" + typeEntrepriseFilterValue : "")
+              + (categorieIdValue ? "&categorie_id=" + categorieIdValue : "");
+
+    // Redirect to the same page with the selected filters
+    window.location.href = url;
+}
+
+</script>
+
+{% endblock %}

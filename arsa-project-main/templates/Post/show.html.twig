@@ -1,0 +1,28 @@
+
+<p>{{ post.contenu }}</p>
+ {% if post.image %}
+                    <img src="{{ asset('uploads/' ~ post.image) }}" alt="Image" width="100">
+                {% else %}
+                    <p>Pas d'image</p>
+                {% endif %}
+
+<h2>Commentaires :</h2>
+{% if post.commentaires is empty %}
+    <p>Aucun commentaire pour ce post.</p>
+{% else %}
+    {% for commentaire in post.commentaires %}
+        <div>
+            <strong>{{ commentaire.idUser }}:</strong>
+       
+            <p>{{ commentaire.contenu }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<hr>
+
+<h3>Ajouter un commentaire :</h3>
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-primary">Envoyer</button>
+{{ form_end(form) }}

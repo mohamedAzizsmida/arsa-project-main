@@ -1,0 +1,63 @@
+{% extends 'baseMainEntreprise.html.twig' %}
+
+{% block title %}EcoDon - Produits Donnés{% endblock %}
+
+{% block body %}
+  <!-- Section de la barre de navigation -->
+    <section class="breadcrumb-section set-bg" data-setbg="{{asset('img/breadcrumb.jpg')}}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Tous les Produits</h2>
+                        <div class="breadcrumb__option">
+                            <a href="">Accueil</a>
+                            <a href="">Légumes</a>
+                            <span>Tous les Produits</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section de la barre de navigation fin -->
+
+<div class="container">
+    <!-- Section de la liste des produits -->
+    <section class="product-list spad">
+        <div class="container">
+        <!-- Bouton d'ajout de produit -->
+      <div class="text-right my-4">
+          <a href="{{ path('app_produit') }}" class="btn btn-success">+ Ajouter un Produit</a>
+      </div> 
+         {% for produit in produits %}
+            <div class="row col-md-12">
+                <div class="col-lg-4 col-md-6">
+                    <div class="product__item">
+                        <div class="product__item__pic">
+                            <img src="{{ asset('uploadsImageProduit/' ~ produit.image) }}" alt="{{ produit.nom }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="">
+                        <h5><strong>{{ produit.nom }}</strong></h5>  <!-- Nom du produit en gras -->
+                        <p>{{ produit.descriptionProduit }}</p>
+                        <p><strong>Quantité :</strong> {{ produit.quantite }}</p>  <!-- Quantité originale -->
+                        <p><strong>Quantité restante :</strong> {{ produit.quantiteReelle | default('N/A') }}</p>  <!-- Quantité réelle -->
+                        <p><strong>Catégorie :</strong> {{ produit.categorie.nom }}</p> <!-- Nom de la catégorie -->
+                       <a href="{{ path('app_produit_details', {'id_produit': produit.idProduit}) }}" class="primary-btn">Voir les détails</a>
+
+                    </div>
+                </div>
+            </div>
+         {% else %}
+            <p>Aucun produit trouvé.</p>
+         {% endfor %}
+        </div>
+    </section>
+    <!-- Section de la liste des produits fin -->
+
+</div>
+
+{% endblock %}

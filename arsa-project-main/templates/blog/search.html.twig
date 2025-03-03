@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche d'articles{% endblock %}
+
+{% block body %}
+    <h1>Recherche d'articles</h1>
+    {{ form_start(form) }}
+        {{ form_row(form.contenu) }}
+       
+        <button class="btn btn-primary">Rechercher</button>
+    {{ form_end(form) }}
+
+    <h2>Résultats</h2>
+    {% if posts is not empty %}
+        <ul>
+            {% for post in posts %}
+                <li>
+                 
+                    <img src="{{ asset('uploads/' ~ post.image) }}" alt="Image" width="100">
+              
+                   
+             
+                    <p>{{ post.contenu }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun résultat trouvé.</p>
+    {% endif %}
+{% endblock %}

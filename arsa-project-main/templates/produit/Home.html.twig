@@ -1,0 +1,46 @@
+{% extends 'baseMainEntreprise.html.twig' %}
+
+{% block title %}Product Home{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Product Dashboard</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3>Total Products</h3>
+                    <p>{{ totalProducts }}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3>Total Quantity</h3>
+                    <p>{{ totalQuantity }}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <h3>Average Quantity per Product</h3>
+                    <p>{{ averageQuantity|number_format(2) }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="stat-card">
+                    <h3>Total Categories</h3>
+                    <p>{{ totalCategories }}</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Product List</h2>
+        <ul>
+            {% for produit in produits %}
+                <li>{{ produit.nom }} ({{ produit.quantiteReelle }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

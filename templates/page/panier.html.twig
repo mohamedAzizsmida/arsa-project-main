@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Panier -{% endblock %}
+
+
+
+
+
+
+
+{% block body %}
+
+<!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="img/donate.jpg" style="position: relative;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.1); z-index: 1;"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text" style="color: green;">
+                    <h2 style="color: green;">Donation Cart</h2>
+                    <div class="breadcrumb__option">
+                        <a style="color: green;" href="{{ path('app_eventspage') }}">Events</a>
+                        <span style="color: green;">Donation purshase</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+  <!-- Shoping Cart Section Begin -->
+
+
+<section class="shoping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="shoping__product">Donation Type</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for type, item in cart %}
+                                <tr id="cart-row-{{ type }}">
+                                    <td class="shoping__cart__item">
+                                        <img src="{{ asset(item.item.image) }}" alt="{{ item.item.name }}" width="101" height="100">
+                                        <h5>{{ item.item.name }}</h5>
+                                    </td>
+                                    <td class="shoping__cart__price">
+                                        ${{ item.item.price }}
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <div class="pro-qty" data-type="{{ type }}">
+                                                <input type="text" value="{{ item.quantity }}" readonly>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total">
+                                        ${{ item.item.price * item.quantity }}
+                                    </td>
+                                    <td class="shoping__cart__item__close">
+                                        <a href="{{ path('app_remove_from_cart', {'type': type}) }}">
+                                            <span class="icon_close"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__btns">
+                    <a href="{{ path('app_eventspage') }}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                </div>
+            </div>
+            <div class="col-lg-6 offset-lg-6">
+                    <div class="shoping__checkout">
+                        <h5>Cart Total</h5>
+                        <ul>
+                            <li>Total <span id="cart-total">${{ total }}</span></li>
+                        </ul>
+                        {% if cart is not empty and total > 0 %}
+                            <a href="{{ path('app_checkout') }}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        {% else %}
+                            <a href="{{ path('app_eventspage') }}" class="primary-btn">CONTINUE SHOPPING</a>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- Shoping Cart Section End -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.querySelectorAll('.pro-qty').forEach(qtyDiv => {
+            const type = qtyDiv.dataset.type;
+            const input = qtyDiv.querySelector('input');
+            const decBtn = qtyDiv.querySelector('.dec');
+            const incBtn = qtyDiv.querySelector('.inc');
+
+            incBtn.addEventListener('click', () => {
+                let quantity = parseInt(input.value) + 1;
+                updateQuantity(type, quantity);
+            });
+
+            decBtn.addEventListener('click', () => {
+                if (decBtn.classList.contains('disabled')) return;
+                let quantity = parseInt(input.value) - 1;
+                if (quantity >= 1) {
+                    updateQuantity(type, quantity);
+                }
+            });
+        });
+
+        function updateQuantity(type, quantity) {
+            fetch(`{{ path('app_update_cart', {'type': 'TYPE', 'quantity': 'QTY'}) }}`
+                .replace('TYPE', type)
+                .replace('QTY', quantity), {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                location.reload();
+            });
+        }
+    </script>
+{% endblock %}

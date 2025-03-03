@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .header {
+            background-color: #4a6cf7;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666666;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>{{ associationName }}</h1>
+        </div>
+        <div class="content">
+            <p>Dear {{ donorName }},</p>
+            
+            <p>Thank you for your generous donation to our event "{{ eventName }}". Your support means a lot to us!</p>
+            
+            <p>{{ customMessage }}</p>
+            
+            <p>Your contribution helps us continue our mission and make a real difference in people's lives.</p>
+            
+            <p>Best regards,<br>
+            The {{ associationName }} Team</p>
+        </div>
+        <div class="footer">
+            <p>This email was sent by {{ associationName }}</p>
+        </div>
+    </div>
+</body>
+</html>

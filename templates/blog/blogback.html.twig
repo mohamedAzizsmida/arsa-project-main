@@ -1,0 +1,259 @@
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}Blog - EcoDon{% endblock %}
+
+{% block body %}
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* Breadcrumb Section */
+        .breadcrumb-section {
+            background-size: cover;
+            padding: 50px 0;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Blog Container */
+        .blog {
+            padding: 60px 0;
+        }
+
+        /* Blog Items */
+        .blog__item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            padding-bottom: 15px;
+        }
+
+        .blog__item:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Blog Images */
+        .blog__item__pic img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        /* Blog Text */
+        .blog__item__text {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .blog__item__text h5 a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .blog__item__text h5 a:hover {
+            color: #4CAF50;
+        }
+
+        /* Comment Link */
+        .comment-link {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .comment-link:hover {
+            background: #45a049;
+        }
+
+        /* Action Buttons */
+        .blog-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+        }
+
+        /* Sort Dropdown */
+        .sort-dropdown {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .sort-dropdown select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .contact-form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-form button {
+            width: 100%;
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .contact-form button:hover {
+            background: #45a049;
+        }
+        /* Sort Dropdown */
+.sort-dropdown {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.sort-dropdown select {
+    padding: 10px 15px;
+    border: 2px solid #4CAF50;
+    border-radius: 8px;
+    background: white;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.breadcrumb__text h2 {
+    font-weight: bold;  /* Makes it bold */
+    color: #45a049;  /* Sets the color */
+    font-size: 32px;  /* Adjust size if needed */
+}
+
+/* Hover & Focus Effect */
+.sort-dropdown select:hover,
+.sort-dropdown select:focus {
+    border-color: #45a049;
+    background: #f4f4f4;
+}
+
+    </style>
+
+    <!-- Breadcrumb Section -->
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb.jpg') }}">
+        <div class="container">
+<div class="breadcrumb__text">
+    <h2>Blog</h2>
+</div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-7">
+                    <!-- Sort Dropdown -->
+<div class="sort-dropdown">
+    <form method="get" action="{{ path('app_association_blog') }}">
+        <select name="sort" onchange="this.form.submit()">
+            <option value="desc" {% if sort == 'desc' or sort is null %}selected{% endif %}>Newest First</option>
+            <option value="asc" {% if sort == 'asc' %}selected{% endif %}>Oldest First</option>
+        </select>
+    </form>
+</div>
+
+                    <div class="row">
+                        {% for blogPost in blogPosts %}
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                <div class="blog__item">
+                                    <!-- Image -->
+                                    <div class="blog__item__pic">
+                                        {% if blogPost.image %}
+                                            <img src="{{ asset('uploads/' ~ blogPost.image) }}" alt="Image">
+                                        {% else %}
+                                            <p style="text-align:center; padding: 10px;">Pas d'image</p>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div class="blog__item__text">
+                                        <h5><a href="#">{{ blogPost.contenu }}</a></h5>
+                                        <a href="{{ path('app_commentaire_back', {'id': blogPost.id}) }}" class="comment-link">
+                                            <i class="fas fa-comments"></i> Voir les commentaires
+                                        </a>
+                                    </div>
+
+                                    <!-- Buttons -->
+                                    <div class="blog-actions">
+                                    
+                                        <a href="{{ path('app_association_edit', {'id': blogPost.id}) }}" class="btn btn-primary">Modifier</a>
+                                        <a href="{{ path('app_post_show_qr', {'id': blogPost.id}) }}" class="btn btn-primary">Show</a>
+                                        <form action="{{ path('app_association_delete', {'id': blogPost.id}) }}" method="post">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ blogPost.id) }}">
+                                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add/Edit Blog Form -->
+    <div class="container">
+        <div class="contact-form">
+            <h1>{{ blogPost is defined ? 'Modifier' : 'Ajouter' }} un blog</h1>
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'enctype': 'multipart/form-data'}}) }}
+            
+            <div class="form-group">
+                {{ form_label(form.contenu) }}
+                {{ form_widget(form.contenu, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.contenu) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.image) }}
+                {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                {% if blogPost is defined and blogPost.imageFile %}
+                    <div class="mt-2 text-center">
+                        <img src="{{ asset('uploads/' ~ blogPost.imageFile) }}" alt="Image actuelle" class="img-thumbnail" width="150">
+                    </div>
+                {% endif %}
+                {{ form_errors(form.image) }}
+            </div>
+            
+            <button type="submit" class="site-btn">{{ blogPost is defined ? 'Modifier' : 'Ajouter' }}</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

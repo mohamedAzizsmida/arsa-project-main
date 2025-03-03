@@ -1,0 +1,12 @@
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}Edit Formation{% endblock %}
+
+{% block body %}
+    <h1>Edit Formation</h1>
+
+    {{ include('Formation/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_formation_index') }}">back to list</a>
+
+{% endblock %}

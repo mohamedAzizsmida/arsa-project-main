@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You for Your Donation!</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h1 style="color: #28a745; text-align: center;">Thank You for Your Donation!</h1>
+        
+        <p>Dear {{ donation.firstName }} {{ donation.lastName }},</p>
+        
+        <p>We are grateful for your generous donation of ${{ donation.amount }}. Your support means a lot to us!</p>
+        
+        <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <h3 style="color: #28a745;">Donation Details:</h3>
+            <p>Amount: ${{ donation.amount }}</p>
+            <p>Donation Type: {{ donation.type }}</p>
+            <p>Date: {{ "now"|date("F d, Y") }}</p>
+        </div>
+        
+        <p>Your contribution will help make a positive impact in our community.</p>
+        
+        <p>Best regards,<br>Your Organization Team</p>
+    </div>
+</body>
+</html>

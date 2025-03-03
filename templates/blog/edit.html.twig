@@ -1,0 +1,41 @@
+{# templates/blog/edit.html.twig #}
+
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}Modifier l'article{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Modifier l'article</h1>
+
+        {# Affichage des erreurs si le formulaire n'est pas valide #}
+        {% if form.vars.errors|length > 0 %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for error in form.vars.errors %}
+                        <li>{{ error.message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {# Formulaire de modification de l'article #}
+        {{ form_start(form) }}
+        
+        <div class="form-group">
+            {{ form_label(form.contenu) }}
+            {{ form_widget(form.contenu, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        
+        <div class="form-group">
+            {{ form_label(form.image) }}
+            {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        
+        {{ form_end(form) }}
+
+        <a href="{{ path('app_association_blog') }}" class="btn btn-secondary">Retour à la liste</a>
+    </div>
+{% endblock %}

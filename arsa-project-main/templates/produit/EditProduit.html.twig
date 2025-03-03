@@ -1,0 +1,131 @@
+{% extends 'baseMainEntreprise.html.twig' %}
+
+{% block title %}EcoDon - Détails du Produit{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="checkout__form">
+    <div>
+        <h4 id="titlefrom">Détails du produit</h4>
+        <!-- Add the button to return to show all products -->
+                <div class="cltbtnAddPr mt-3">
+                    <a href="{{ path('app_produit_show_all') }}" class="site-btn return-btn">Retour à la liste des produits</a>
+                </div>
+</div>
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-lg-8 col-md-6">
+                <div class="checkout__input mb-3">
+                    <p>Nom du produit<span>*</span></p>
+                    {{ form_widget(form.nom, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.nom.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'placeholder': 'Nom du produit',
+                            'disabled': true
+                        }
+                    }) }}
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Quantité<span>*</span></p>
+                    {{ form_widget(form.quantite, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.quantite.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'placeholder': 'Quantité',
+                            'disabled': true
+                        }
+                    }) }}
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Description du produit<span>*</span></p>
+                    {{ form_widget(form.descriptionProduit, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.descriptionProduit.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'placeholder': 'Description du produit',
+                            'disabled': true
+                        }
+                    }) }}
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Image du produit (JPEG, PNG)</p>
+                   <div id="imagePreview" class="mt-3" {% if not produit.image %}style="display: none;"{% endif %}>
+                        {% if produit.image %}
+                            <img src="{{ asset('uploadsImageProduit/' ~ produit.image) }}" alt="Produit Image" width="100%">
+                            <button type="button" id="deleteImageButton" class="btn btn-danger mt-2">Supprimer l'image</button>
+                        {% endif %}
+                    </div>
+                    {{ form_widget(form.image, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.image.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'disabled': true
+                        }
+                    }) }}
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Catégorie<span>*</span></p>
+                    {{ form_widget(form.categorie, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.categorie.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'disabled': true
+                        }
+                    }) }}
+                </div>
+
+                <div class="cltbtnAddPr">
+                    {% if produit.idProduit is defined %}
+                        <button type="button" id="editButton" class="site-btn">Modifier le produit</button>
+                    {% else %}
+                        <p>Produit non trouvé.</p>
+                    {% endif %}
+                </div>
+
+                
+            </div>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<script>
+    document.getElementById('deleteImageButton')?.addEventListener('click', function() {
+        // Set the action to 'delete_image' and submit the form
+        var form = document.querySelector('form');
+        form.action = '{{ path('app_produit_details', {'id_produit': produit.idProduit}) }}';
+        form.method = 'POST';
+        
+        // Append a hidden field with the action
+        var hiddenField = document.createElement('input');
+        hiddenField.type = 'hidden';
+        hiddenField.name = 'action';
+        hiddenField.value = 'delete_image';
+        form.appendChild(hiddenField);
+        
+        form.submit();
+    });
+
+    document.getElementById('editButton').addEventListener('click', function() {
+        var formElements = document.querySelectorAll('.checkout__input input, .checkout__input textarea, .checkout__input select, .checkout__input .nice-select');
+
+        document.querySelectorAll('.checkout__input .nice-select')[0].classList.remove('disabled');
+        formElements.forEach(function(element) {
+            element.removeAttribute('disabled');
+        });
+
+        if (this.textContent === "Modifier le produit") {
+            this.textContent = "Sauvegarder le produit";
+            document.getElementById("titlefrom").textContent = "Modification du produit";
+        } else {
+            document.querySelector('form').submit();
+        }
+    });
+</script>
+{% endblock %}

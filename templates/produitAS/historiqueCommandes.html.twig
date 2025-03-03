@@ -1,0 +1,74 @@
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}Historique des Commandes{% endblock %}
+
+{% block body %}
+    <!-- Section de la barre de navigation -->
+    <section class="breadcrumb-section set-bg" data-setbg="{{ asset('img/breadcrumb.jpg') }}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Historique des Commandes</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Section de la barre de navigation fin -->
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+               <div class="container mt-5">
+    <div class="order-history-table">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID Commande</th>
+                    <th>Date de Commande</th>
+                    <th>Total Produits</th> <!-- New column for total products -->
+                    <th>Status</th> <!-- Added Status column -->
+                    <th>Détails</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
+                    <tr>
+                        <td>{{ commande.getIdCommande() }}</td> <!-- Display order ID -->
+                        <td>{{ commande.getDateCommande()|date('d/m/Y') }}</td> <!-- Display order date -->
+                        <td>
+                            {% set totalProducts = 0 %}
+                            {% for commandeProduit in commande.commandeProduits %}
+                                {% set totalProducts = totalProducts + commandeProduit.quantite %}
+                            {% endfor %}
+                            {{ totalProducts }} <!-- Display the total number of products in the order -->
+                        </td>
+                        <td>
+                            {% if commande.status == 1 %}
+                                <span class="badge bg-success text-white">Validée</span> <!-- Display 'Validée' for status 1 -->
+                            {% else %}
+                                <span class="badge bg-warning text-white">En Attente</span> <!-- Display 'En Attente' for status 0 -->
+                            {% endif %}
+                        </td> <!-- Display order status -->
+                        <td>
+                            <a href="{{ path('commande_details', {'id': commande.getIdCommande()}) }}" class="btn return-btn btn-sm">
+                                Voir les détails
+                            </a> <!-- Link to order details -->
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">Aucune commande passée.</td> <!-- Adjusted colspan for the new column -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

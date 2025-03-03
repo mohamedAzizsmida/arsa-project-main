@@ -1,0 +1,13 @@
+{% extends 'baseMainUser.html.twig' %}
+
+{% block body %}
+    <h1>Article</h1>
+    <p>{{ post.contenu }}</p>
+
+    <p>👀 Vues : {{ post.views }} | ❤️ Likes : {{ post.likes }}</p>
+<form action="{{ path('post_like', {'id': post.id}) }}" method="POST">
+    <input type="hidden" name="_token" value="{{ csrf_token('like_post_' ~ post.id) }}">
+    <button type="submit">❤️ Liker</button>
+            <a href="{{ path('app_post_front')}}" class="btn btn-secondary">Retour au post</a>
+</form>
+{% endblock %}

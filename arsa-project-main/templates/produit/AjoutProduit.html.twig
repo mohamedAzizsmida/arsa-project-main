@@ -1,0 +1,101 @@
+{% extends 'baseMainEntreprise.html.twig' %}
+
+{% block title %}EcoDon - Ajout Produit{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="checkout__form">
+    <div>
+        <h4>Ajout produit</h4>
+ <!-- Add the button to return to show all products -->
+                <div class="cltbtnAddPr mt-3">
+                    <a href="{{ path('app_produit_show_all') }}" class="site-btn return-btn">Retour à la liste des produits</a>
+                </div>
+                </div>
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-lg-8 col-md-6">
+                <div class="checkout__input mb-3">
+                    <p>Nom du produit<span>*</span></p>
+                    {{ form_widget(form.nom, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.nom.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'placeholder': 'Nom du produit'
+                        }
+                    }) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.nom) }}
+                    </div>
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Quantité<span>*</span></p>
+                    {{ form_widget(form.quantite, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.quantite.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'placeholder': 'Quantité'
+                        }
+                    }) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.quantite) }}
+                    </div>
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Description du produit<span>*</span></p>
+                    {{ form_widget(form.descriptionProduit, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.descriptionProduit.vars.errors|length > 0 ? 'is-invalid' : ''),
+                            'placeholder': 'Description du produit'
+                        }
+                    }) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.descriptionProduit) }}
+                    </div>
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Image du produit (JPEG, PNG)</p>
+                    {{ form_widget(form.image, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.image.vars.errors|length > 0 ? 'is-invalid' : '')
+                        }
+                    }) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.image) }}
+                    </div>
+                </div>
+
+                <div class="checkout__input mb-3">
+                    <p>Catégorie<span>*</span></p>
+                    {{ form_widget(form.categorie, {
+                        'attr': {
+                            'class': 'form-control ' ~ (form.categorie.vars.errors|length > 0 ? 'is-invalid' : '')
+                        }
+                    }) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.categorie) }}
+                    </div>
+                </div>
+
+                {# Affichage des erreurs globales du formulaire
+                <div class="alert alert-danger" role="alert">
+                    {{ form_errors(form) }}
+                </div> #}
+
+                <div class="cltbtnAddPr">
+                    <button type="submit" class="site-btn">Ajouter le produit</button>
+                </div>
+            </div>
+            {% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% endblock %}

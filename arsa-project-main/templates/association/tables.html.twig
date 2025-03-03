@@ -1,0 +1,1177 @@
+{# templates/admin/tables.html.twig #}
+{% extends 'association/base.html.twig' %}
+
+{% block title %}Association Tables{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+
+    .sidebar-nav-wrapper {
+    /* existing styles */
+    transition: all 0.3s ease-in-out;
+}
+
+.sidebar-nav-wrapper.collapsed {
+    margin-left: -300px; /* Adjust based on your sidebar width */
+}
+
+.overlay {
+    /* existing styles */
+    display: none;
+}
+
+.overlay.active {
+    display: block;
+}
+
+.main-wrapper {
+    /* existing styles */
+    transition: all 0.3s ease-in-out;
+}
+
+.main-wrapper.active {
+    margin-left: 0;
+}
+    /* Search Box Styles */
+.search-box {
+    position: relative;
+    width: 300px;
+}
+
+.search-box input {
+    width: 100%;
+    height: 46px;
+    padding: 0 20px;
+    padding-right: 50px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+}
+
+.search-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+}
+
+
+.main-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+}
+
+.primary-btn {
+    background: #4a6cf7;
+    color: #fff;
+}
+
+.primary-btn:hover {
+    background: #3d5ef3;
+}
+
+.mr-5 {
+    margin-right: 5px;
+}
+
+        .pagination-wrapper {
+            margin-top: 2rem;
+        }
+        
+        .pagination .page-link {
+            color: #4a6cf7;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 0.75rem;
+            margin: 0 2px;
+            min-width: 38px;
+            text-align: center;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #4a6cf7;
+            border-color: #4a6cf7;
+            color: #fff;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            background-color: #fff;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #4a6cf7;
+            color: #fff;
+            border-color: #4a6cf7;
+        }
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            border-width: 0.2em;
+        }
+        
+        #sendEmailConfirm:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+       /* Update your Modal styles section */
+#eventDonorsModal .modal-dialog {
+    max-width: 800px;
+}
+
+#eventDonorsModal .modal-content {
+    max-height: 80vh; /* Increased from 30vh to 80vh */
+}
+
+#eventDonorsModal .modal-body {
+    padding: 0;
+    max-height: calc(80vh - 120px); /* Adjust for header height */
+    overflow: hidden; /* Prevent double scrollbars */
+}
+
+#eventDonorsModal .table-container {
+    max-height: calc(80vh - 120px);
+    overflow-y: auto;
+}
+
+#eventDonorsModal .table {
+    margin-bottom: 0;
+}
+
+#eventDonorsModal .table thead {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 1;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#eventDonorsModal .table td,
+#eventDonorsModal .table th {
+    padding: 12px 15px;
+    white-space: nowrap;
+}
+
+/* Custom scrollbar styles */
+#eventDonorsModal .table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#eventDonorsModal .table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#eventDonorsModal .table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+#eventDonorsModal .table-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.profile-box {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    left: auto;
+    margin-top: 0.5rem;
+    min-width: 240px;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+}
+
+.author-info .image {
+    width: 40px;
+    height: 40px;
+    margin-right: 1rem;
+}
+
+.author-info .image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+    </style>
+    {% endblock %}
+
+{% block body %}
+    <body>
+    <!-- ======== Preloader =========== -->
+    <div id="preloader">
+      <div class="spinner"></div>
+    </div>
+    <!-- ======== Preloader =========== -->
+
+    <!-- ======== sidebar-nav start =========== -->
+    <aside class="sidebar-nav-wrapper">
+      <div class="navbar-logo">
+        <a href="{{ path('association_dashboard') }}">
+          <img src="{{ asset('img/ecodon.png') }}" alt="logo" style="width: 120px; height: auto; max-height: 60px; object-fit: contain;" />
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="nav-item nav-item-has-children">
+            <a
+              href="#0"
+              class="collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#ddmenu_1"
+              aria-controls="ddmenu_1"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8.74999 18.3333C12.2376 18.3333 15.1364 15.8128 15.7244 12.4941C15.8448 11.8143 15.2737 11.25 14.5833 11.25H9.99999C9.30966 11.25 8.74999 10.6903 8.74999 10V5.41666C8.74999 4.7263 8.18563 4.15512 7.50586 4.27556C4.18711 4.86357 1.66666 7.76243 1.66666 11.25C1.66666 15.162 4.83797 18.3333 8.74999 18.3333Z" />
+                  <path
+                    d="M17.0833 10C17.7737 10 18.3432 9.43708 18.2408 8.75433C17.7005 5.14918 14.8508 2.29947 11.2457 1.75912C10.5629 1.6568 10 2.2263 10 2.91665V9.16666C10 9.62691 10.3731 10 10.8333 10H17.0833Z" />
+                </svg>
+              </span>
+              <span class="text">Dashboard</span>
+            </a>
+            <ul id="ddmenu_1" class="collapse dropdown-nav">
+              <li>
+                <a href="{{ path('association_dashboard') }}"> Analytics </a>
+              </li>
+            </ul>
+          </li>
+          
+          <span class="divider"><hr /></span>
+          
+          <li class="nav-item active">
+            <a href="{{ path('association_tables') }}">
+              <span class="icon">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M1.66666 4.16667C1.66666 3.24619 2.41285 2.5 3.33332 2.5H16.6667C17.5872 2.5 18.3333 3.24619 18.3333 4.16667V9.16667C18.3333 10.0872 17.5872 10.8333 16.6667 10.8333H3.33332C2.41285 10.8333 1.66666 10.0872 1.66666 9.16667V4.16667Z" />
+                  <path
+                    d="M1.875 13.75C1.875 13.4048 2.15483 13.125 2.5 13.125H17.5C17.8452 13.125 18.125 13.4048 18.125 13.75C18.125 14.0952 17.8452 14.375 17.5 14.375H2.5C2.15483 14.375 1.875 14.0952 1.875 13.75Z" />
+                  <path
+                    d="M2.5 16.875C2.15483 16.875 1.875 17.1548 1.875 17.5C1.875 17.8452 2.15483 18.125 2.5 18.125H17.5C17.8452 18.125 18.125 17.8452 18.125 17.5C18.125 17.1548 17.8452 16.875 17.5 16.875H2.5Z" />
+                </svg>
+              </span>
+              <span class="text">Gerer</span>
+            </a>
+          </li>
+          
+        </ul>
+      </nav>
+      
+    </aside>
+    <div class="overlay"></div>
+    <!-- ======== sidebar-nav end =========== -->
+
+    <!-- ======== main-wrapper start =========== -->
+    <main class="main-wrapper">
+        <!-- ========== header start ========== -->
+      <header class="header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-5 col-md-5 col-6">
+              <div class="header-left d-flex align-items-center">
+                <div class="menu-toggle-btn mr-15">
+                  <h2>{{ association.name }}</h2>
+                </div>
+                
+              </div>
+            </div>
+            <div class="col-lg-7 col-md-7 col-6">
+              <div class="header-right">
+               
+                <!-- profile start -->
+                <div class="profile-box ml-15">
+                <button class="dropdown-toggle bg-transparent border-0" type="button" id="profile"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="profile-info">
+                        <div class="info">
+                            <div class="image">
+                                <img src="{{ asset('admin_assets/images/profile/profile-image.png') }}" alt="" />
+                            </div>
+                            <div>
+                                <h6 class="fw-500">{{ association.name }}</h6>
+                                <p>Association</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
+                    <li>
+                        <div class="author-info flex items-center !p-1">
+                            <div class="image">
+                                <img src="{{ asset('admin_assets/images/profile/profile-image.png') }}" alt="image">
+                            </div>
+                            <div class="content">
+                                <h4 class="text-sm">{{ association.name }}</h4>
+                                <a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">Email@gmail.com</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <!-- LogOut  -->
+                        <a href="{{ path('app_eventspage') }}"> <i class="lni lni-exit"></i> Sign Out </a>
+                    </li>
+                </ul>
+            </div>
+                <!-- profile end -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- ========== header end ========== -->
+
+      <!-- ========== table components start ========== -->
+      <section class="table-components">
+        <div class="container-fluid">
+          <!-- ========== title-wrapper start ========== -->
+          <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <div class="title">
+                    <h2>{{ association.name|default('Association') }} - Events Management</h2>
+                </div>
+              </div>
+              <!-- end col -->
+              <div class="col-md-6">
+                <div class="breadcrumb-wrapper">
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item">
+                        <a href="{{ path('association_dashboard') }}">Dashboard</a>
+                      </li>
+                      <li class="breadcrumb-item active" aria-current="page">
+                        Tables
+                      </li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+              <!-- end col -->
+            </div>
+            <!-- end row -->
+          </div>
+          <!-- ========== title-wrapper end ========== -->
+
+          <!-- ========== table events start ========== -->
+          <div class="tables-wrapper ">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="card-style mb-30">
+                      <div class="d-flex justify-content-between align-items-center mb-4">
+                        <!-- Search Bar -->
+                          <div class="search-box">
+                              <input type="text" class="form-control" id="searchInput" placeholder="Search by event name, association, or date...">
+                              <i class="lni lni-search-alt"></i>
+                          </div>
+                        <!-- Add Event Button -->
+                        <button class="main-btn primary-btn btn-hover" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                            <i class="lni lni-plus mr-5"></i> Add Event
+                        </button>
+                    </div>
+
+                        <h6 class="mb-10">Events Table</h6>
+                      
+                      <!-- begin table content -->
+                      
+                        <div class="table-wrapper table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th><h6>Image</h6></th>
+                                        <th><h6>Name</h6></th>
+                                        <th><h6>Association</h6></th>
+                                        <th><h6>Date</h6></th>
+                                        <th><h6>Price</h6></th>
+                                        <th><h6>Location</h6></th>
+                                        <th><h6>Type</h6></th>
+                                        <th><h6>Actions</h6></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for event in events %}
+                                    <tr>
+                                        <td class="min-width">
+                                            <div class="event-image">
+                                                <img src="{{ asset('uploads/events/' ~ event.imageFilename) }}" 
+                                                    alt="{{ event.name }}" 
+                                                    style="width: 50px; height: 50px; object-fit: cover;" />
+                                            </div>
+                                        </td>
+                                        <td class="min-width"><p>{{ event.name }}</p></td>
+                                        <td class="min-width"><p>{{ event.association.name }}</p></td>
+                                        <td class="min-width"><p>{{ event.eventDate|date('Y-m-d') }}</p></td>
+                                        <td class="min-width"><p>${{ event.price }}</p></td>
+                                        <td class="min-width"><p>{{ event.location.name }}</p></td>
+                                        <td class="min-width">
+                                            <span class="status-btn {{ event.type == 'water' ? 'info-btn' : 
+                                                                    event.type == 'education' ? 'warning-btn' :
+                                                                    event.type == 'blood' ? 'danger-btn' :
+                                                                    event.type == 'homes' ? 'success-btn' :
+                                                                    event.type == 'ramadan' ? 'purple-btn' : 'primary-btn' }}">
+                                                {{ event.type|capitalize }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="action">
+                                                <button class="text-primary me-2" onclick="editEvent({{ event.id }})">
+                                                    <i class="lni lni-pencil"></i>
+                                                </button>
+                                                <button class="text-danger" onclick="deleteEvent({{ event.id }})">
+                                                    <i class="lni lni-trash-can"></i>
+                                                </button>
+                                                        <button class="text-secondary" onclick="viewEventDonors({{ event.id }})">
+                                                    <i class="lni lni-eye"></i>
+                                                </button>
+                                                            
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                                
+                            <div class="pagination-wrapper mt-4">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-center">
+                                        {% if startPage > 1 %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ path('association_tables', {'page': 1}) }}">1</a>
+                                            </li>
+                                            {% if startPage > 2 %}
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">...</span>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% for i in startPage..endPage %}
+                                            <li class="page-item {{ currentPage == i ? 'active' : '' }}">
+                                                <a class="page-link" href="{{ path('association_tables', {'page': i}) }}">{{ i }}</a>
+                                            </li>
+                                        {% endfor %}
+
+                                        {% if endPage < totalPages %}
+                                            {% if endPage < totalPages - 1 %}
+                                                <li class="page-item disabled">
+                                                    <span class="page-link">...</span>
+                                                </li>
+                                            {% endif %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ path('association_tables', {'page': totalPages}) }}">{{ totalPages }}</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>                   
+            </div>
+
+           
+            
+    
+</section>
+      <!-- ========== table components end ========== -->
+      <!-- ========== modals components end ========== -->
+
+      
+<div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEventModalLabel">Add New Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="addEventForm">
+                    <input type="hidden" id="associationId" value="{{ association.id }}">
+                    <div class="mb-3">
+                        <label for="eventName" class="form-label">Event Name</label>
+                        <input type="text" class="form-control" id="eventName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventDate" class="form-label">Date</label>
+                        <input type="date" 
+                            class="form-control" 
+                            id="eventDate" 
+                            required 
+                            min="{{ "now"|date('Y-m-d') }}"
+                            title="Please select a future date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventPrice" class="form-label">Price</label>
+                        <input type="number" step="0.01" class="form-control" id="eventPrice" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventLocation" class="form-label">Location</label>
+                        <select class="form-control" id="eventLocation" required>
+                            <option value="">Select Location</option>
+                            {% for location in locations %}
+                                <option value="{{ location.id }}">{{ location.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventType" class="form-label">Type</label>
+                        <select class="form-control" id="eventType" required>
+                            <option value="">Select Type</option>
+                            <option value="water">Water</option>
+                            <option value="education">Education</option>
+                            <option value="blood">Blood</option>
+                            <option value="homes">Homes</option>
+                            <option value="ramadan">Ramadan</option>
+                            <option value="hospital">Hospital</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventImage" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="eventImage" accept="image/*" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveEventBtn">Save Event</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Donors Modal -->
+<div class="modal fade" id="eventDonorsModal" tabindex="-1" aria-labelledby="eventDonorsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventDonorsModalLabel">Event Donors</h5>
+                <button type="button" class="btn btn-primary ms-auto me-2" id="sendEmailToDonors">
+                    <i class="lni lni-envelope me-1"></i> Send Email
+                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-0"> <!-- Removed padding -->
+                <div class="table-container"> <!-- Added wrapper div -->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 200px;">Name</th>
+                                    <th style="min-width: 250px;">Email</th>
+                                    <th style="min-width: 150px;">Donation Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody id="donorsList">
+                                <!-- Donors will be inserted here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="noDonorsMessage" class="text-center py-4 d-none">
+                    <p>No donors found for this event.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+      <!-- ========== modals components end ========== -->
+      
+</main>
+    
+
+  
+    <!-- ========= All Javascript files linkup ======== -->
+    <script src="{{ asset('admin_assets/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/Chart.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/dynamic-pie-chart.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/moment.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/fullcalendar.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/jvectormap.min.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/world-merc.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/polyfill.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/main.js') }}"></script>
+    <script src="{{ asset('admin_assets/js/bootstrap.bundle.min.js') }}"></script>
+
+
+
+    <script>
+            document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Profile Dropdown
+        const profileButton = document.querySelector('[data-bs-toggle="dropdown"]');
+        if (profileButton) {
+            new bootstrap.Dropdown(profileButton);
+        }
+
+        // Menu toggle functionality
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.querySelector('.sidebar-nav-wrapper');
+        const overlay = document.querySelector('.overlay');
+        const mainWrapper = document.querySelector('.main-wrapper');
+
+        if (menuToggle && sidebar && overlay && mainWrapper) {
+            function toggleMenu() {
+                sidebar.classList.toggle('collapsed');
+                overlay.classList.toggle('active');
+                mainWrapper.classList.toggle('active');
+            }
+
+            menuToggle.addEventListener('click', toggleMenu);
+            
+            if (overlay) {
+                overlay.addEventListener('click', toggleMenu);
+            }
+        }
+    });
+
+    // Global function to handle viewing event donors
+    window.viewEventDonors = function(eventId) {
+        fetch(`/association/event/${eventId}/donors`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const modal = new bootstrap.Modal(document.getElementById('eventDonorsModal'));
+                const donorsList = document.getElementById('donorsList');
+                const noDonorsMessage = document.getElementById('noDonorsMessage');
+                const tableResponsive = document.querySelector('#eventDonorsModal .table-responsive');
+                
+                document.getElementById('eventDonorsModalLabel').textContent = `Donors - ${data.eventName}`;
+                
+                if (data.donors && data.donors.length > 0) {
+                    donorsList.innerHTML = data.donors.map(donor => `
+                        <tr>
+                            <td>${donor.name || ''}</td>
+                            <td>${donor.email || ''}</td>
+                            <td>$${(donor.amount || 0).toFixed(2)}</td>
+                        </tr>
+                    `).join('');
+                    tableResponsive.classList.remove('d-none');
+                    noDonorsMessage.classList.add('d-none');
+
+                    // Enable send email button
+                    const sendEmailBtn = document.getElementById('sendEmailToDonors');
+                    if (sendEmailBtn) {
+                        sendEmailBtn.dataset.eventId = eventId;
+                        sendEmailBtn.disabled = false;
+                    }
+                } else {
+                    donorsList.innerHTML = '';
+                    tableResponsive.classList.add('d-none');
+                    noDonorsMessage.classList.remove('d-none');
+
+                    // Disable send email button
+                    const sendEmailBtn = document.getElementById('sendEmailToDonors');
+                    if (sendEmailBtn) {
+                        sendEmailBtn.disabled = true;
+                    }
+                }
+                
+                modal.show();
+            } else {
+                throw new Error(data.error || 'Failed to load donors');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading donors: ' + (error.error || error.message || 'Unknown error'));
+        });
+    };
+
+    // Function to handle email sending modal
+    function setupEmailMessageModal(eventId) {
+        // Remove existing modal if it exists
+        let existingModal = document.getElementById('emailMessageModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+
+        const messageModal = `
+            <div class="modal fade" id="emailMessageModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Compose Email Message</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="emailMessage" class="form-label">Message to Donors</label>
+                                <textarea class="form-control" id="emailMessage" rows="5" 
+                                    placeholder="Enter your personalized message to the donors..."></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="sendEmailConfirm">
+                                Send Emails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', messageModal);
+        const modal = new bootstrap.Modal(document.getElementById('emailMessageModal'));
+
+        // Set up send button click handler
+        document.getElementById('sendEmailConfirm').onclick = function() {
+            const sendButton = this;
+            const originalText = sendButton.innerHTML;
+            const message = document.getElementById('emailMessage').value.trim();
+            
+            if (!message) {
+                alert('Please enter a message for the donors');
+                return;
+            }
+
+            sendButton.disabled = true;
+            sendButton.innerHTML = `
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Sending emails...
+            `;
+
+            fetch(`/association/event/${eventId}/send-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    modal.hide();
+                } else {
+                    throw new Error(data.error || 'Failed to send emails');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error sending emails: ' + (error.message || 'Unknown error'));
+            })
+            .finally(() => {
+                sendButton.disabled = false;
+                sendButton.innerHTML = originalText;
+            });
+        };
+
+        modal.show();
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle send email button click
+        const sendEmailBtn = document.getElementById('sendEmailToDonors');
+        if (sendEmailBtn) {
+            sendEmailBtn.addEventListener('click', function() {
+                const eventId = this.dataset.eventId;
+                if (!eventId) return;
+                setupEmailMessageModal(eventId);
+            });
+        }
+
+        // Handle donors modal closing
+        const eventDonorsModal = document.getElementById('eventDonorsModal');
+        if (eventDonorsModal) {
+            eventDonorsModal.addEventListener('hidden.bs.modal', function() {
+                const donorsList = document.getElementById('donorsList');
+                if (donorsList) {
+                    donorsList.innerHTML = '';
+                }
+            });
+        }
+    });
+ 
+
+          
+
+            // Add this to handle modal closing
+            document.addEventListener('DOMContentLoaded', function() {
+                const eventDonorsModal = document.getElementById('eventDonorsModal');
+                if (eventDonorsModal) {
+                    eventDonorsModal.addEventListener('hidden.bs.modal', function() {
+                        // Don't clear the search input when closing the donors modal
+                        const donorsList = document.getElementById('donorsList');
+                        if (donorsList) {
+                            donorsList.innerHTML = '';
+                        }
+                    });
+                }
+            });
+                            
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const saveEventBtn = document.getElementById('saveEventBtn');
+            if (saveEventBtn) {
+                saveEventBtn.addEventListener('click', function() {
+                    const form = document.getElementById('addEventForm');
+                    if (form.checkValidity()) {
+                        const formData = new FormData();
+                        const eventId = document.getElementById('eventId')?.value;
+                        
+                        formData.append('name', document.getElementById('eventName').value);
+                        formData.append('eventDate', document.getElementById('eventDate').value);
+                        formData.append('price', document.getElementById('eventPrice').value);
+                        formData.append('locationId', document.getElementById('eventLocation').value);
+                        formData.append('type', document.getElementById('eventType').value);
+                        
+                        const imageFile = document.getElementById('eventImage').files[0];
+                        if (imageFile) {
+                            formData.append('image', imageFile);
+                        }
+
+                        const url = eventId 
+                            ? `/association/event/${eventId}/update`
+                            : '/association/event/create';
+
+                        fetch(url, {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert(eventId ? 'Event updated successfully!' : 'Event created successfully!');
+                                const modal = bootstrap.Modal.getInstance(document.getElementById('addEventModal'));
+                                if (modal) {
+                                    modal.hide();
+                                }
+                                form.reset();
+                                window.location.reload();
+                            } else {
+                                alert('Error: ' + data.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error saving event');
+                        });
+                    } else {
+                        form.reportValidity();
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Get today's date in YYYY-MM-DD format
+                const today = new Date().toISOString().split('T')[0];
+                
+                // Get the event date input
+                const eventDateInput = document.getElementById('eventDate');
+                if (eventDateInput) {
+                    // Set the minimum date to today
+                    eventDateInput.setAttribute('min', today);
+                    
+                    // Add validation on input change
+                    eventDateInput.addEventListener('change', function() {
+                        const selectedDate = this.value;
+                        if (selectedDate < today) {
+                            alert('Please select a future date for the event.');
+                            this.value = today;
+                        }
+                    });
+                }
+            });
+                
+                const searchInput = document.getElementById('searchInput');
+                const eventTableBody = document.querySelector('.tables-wrapper table tbody');
+                let eventSearchTimeout;
+
+                if (searchInput && eventTableBody) {
+                    // Store the original table content
+                    const originalTableContent = eventTableBody.innerHTML;
+
+                    searchInput.addEventListener('input', function() {
+                        const searchTerm = this.value.trim();
+                        
+                        clearTimeout(eventSearchTimeout);
+                        eventSearchTimeout = setTimeout(() => {
+                            if (searchTerm === '') {
+                                // Restore original content if search is empty
+                                eventTableBody.innerHTML = originalTableContent;
+                            } else {
+                                fetchEventSearchResults(searchTerm);
+                            }
+                        }, 300);
+                    });
+                }
+
+                function fetchEventSearchResults(term) {
+                    fetch(`/association/events/search?term=${encodeURIComponent(term)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                updateEventTable(data.events);
+                            } else {
+                                console.error('Search error:', data.error);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // On error, restore original content
+                            if (eventTableBody) {
+                                eventTableBody.innerHTML = originalTableContent;
+                            }
+                        });
+                }
+            
+            
+
+               
+
+               function updateEventTable(events) {
+                    if (!eventTableBody) return;
+                    eventTableBody.innerHTML = events.map(event => `
+                        <tr>
+                            <td class="min-width">
+                                <div class="event-image">
+                                    <img src="/uploads/events/${event.imageFilename}" 
+                                        alt="${event.name}" 
+                                        style="width: 50px; height: 50px; object-fit: cover;" />
+                                </div>
+                            </td>
+                            <td class="min-width"><p>${event.name}</p></td>
+                            <td class="min-width"><p>${event.association}</p></td>
+                            <td class="min-width"><p>${event.eventDate}</p></td>
+                            <td class="min-width"><p>$${event.price}</p></td>
+                            <td class="min-width"><p>${event.location.name}</p></td>
+                            <td class="min-width">
+                                <span class="status-btn ${getTypeClass(event.type)}">${event.type}</span>
+                            </td>
+                            <td>
+                                <div class="action">
+                                    <button class="text-primary me-2" onclick="editEvent(${event.id})">
+                                        <i class="lni lni-pencil"></i>
+                                    </button>
+                                    <button class="text-danger me-2" onclick="deleteEvent(${event.id})">
+                                        <i class="lni lni-trash-can"></i>
+                                    </button>
+                                    <button class="text-secondary" onclick="viewEventDonors(${event.id})">
+                                        <i class="lni lni-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                function getTypeClass(type) {
+                    const typeClasses = {
+                        'water': 'info-btn',
+                        'education': 'warning-btn',
+                        'blood': 'danger-btn',
+                        'homes': 'success-btn',
+                        'ramadan': 'purple-btn',
+                        'hospital': 'primary-btn'
+                    };
+                    return typeClasses[type] || 'primary-btn';
+                }
+            })();
+
+            
+            
+            const addEventModal = document.getElementById('addEventModal');
+            if (addEventModal) {
+                addEventModal.addEventListener('hidden.bs.modal', function () {
+                    const form = document.getElementById('addEventForm');
+                    if (form) {
+                        form.reset();
+                        const currentImageContainer = document.getElementById('currentImageContainer');
+                        if (currentImageContainer) {
+                            currentImageContainer.remove();
+                        }
+                        document.getElementById('eventImage').setAttribute('required', 'required');
+                        document.getElementById('addEventModalLabel').textContent = 'Add New Event';
+                        const hiddenInput = document.getElementById('eventId');
+                        if (hiddenInput) {
+                            hiddenInput.remove();
+                        }
+                    }
+                });
+            }
+            const eventDonorsModal = document.getElementById('eventDonorsModal');
+            if (eventDonorsModal) {
+                eventDonorsModal.addEventListener('hidden.bs.modal', function () {
+                    // Clear search input if it exists
+                    const searchInput = document.getElementById('searchInput');
+                    if (searchInput) {
+                        searchInput.value = '';
+                    }
+                });
+            }
+
+
+
+        
+
+        
+        function editEvent(eventId) {
+        fetch(`/association/event/${eventId}`)
+                .then(response => response.json())
+                .then(event => {
+                    const form = document.getElementById('addEventForm');
+                    if (form) {
+                        document.getElementById('eventName').value = event.name;
+                        document.getElementById('eventDate').value = event.eventDate;
+                        document.getElementById('eventPrice').value = event.price;
+                        document.getElementById('eventLocation').value = event.location.id;
+                        document.getElementById('eventType').value = event.type;
+                        
+                        
+                        const imageInput = document.getElementById('eventImage');
+                        imageInput.removeAttribute('required');
+                        
+                        
+                        const currentImageContainer = document.getElementById('currentImageContainer');
+                        if (!currentImageContainer && event.imageFilename) {
+                            const container = document.createElement('div');
+                            container.id = 'currentImageContainer';
+                            container.className = 'mb-3';
+                            container.innerHTML = `
+                                <label class="form-label">Current Image</label>
+                                <div>
+                                    <img src="/uploads/events/${event.imageFilename}" 
+                                        alt="Current event image" 
+                                        style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                                </div>
+                            `;
+                            imageInput.parentNode.insertBefore(container, imageInput);
+                        } else if (currentImageContainer && event.imageFilename) {
+                            currentImageContainer.querySelector('img').src = `/uploads/events/${event.imageFilename}`;
+                        }
+                        
+                        
+                        let hiddenInput = document.getElementById('eventId');
+                        if (!hiddenInput) {
+                            hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.id = 'eventId';
+                            form.appendChild(hiddenInput);
+                        }
+                        hiddenInput.value = event.id;
+                        
+                        
+                        document.getElementById('addEventModalLabel').textContent = 'Edit Event';
+                        
+                        const modal = new bootstrap.Modal(document.getElementById('addEventModal'));
+                        modal.show();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error loading event details');
+                });
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                fetch(`/association/event/${eventId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Event deleted successfully!');
+                        window.location.reload();
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown error occurred'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error deleting event');
+                });
+            }
+        }
+
+
+
+         document.addEventListener('DOMContentLoaded', function() {
+          var profileDropdown = document.getElementById('profile');
+          if (profileDropdown) {
+              profileDropdown.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  var dropdown = new bootstrap.Dropdown(profileDropdown);
+                  dropdown.toggle();
+              });
+          }
+      });
+      document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Bootstrap components
+            const dropdowns = document.querySelectorAll('[data-bs-toggle="dropdown"]');
+            dropdowns.forEach(dropdown => {
+                new bootstrap.Dropdown(dropdown);
+            });
+
+            // Menu toggle functionality
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.querySelector('.sidebar-nav-wrapper');
+            const overlay = document.querySelector('.overlay');
+            const mainWrapper = document.querySelector('.main-wrapper');
+
+            if (menuToggle && sidebar && overlay && mainWrapper) {
+                function toggleMenu() {
+                    sidebar.classList.toggle('collapsed');
+                    overlay.classList.toggle('active');
+                    mainWrapper.classList.toggle('active');
+                }
+
+                menuToggle.addEventListener('click', toggleMenu);
+                overlay.addEventListener('click', toggleMenu);
+            }
+        });
+        
+
+        
+        
+        
+            
+
+        
+
+
+
+          
+    </script>
+   
+   </body>
+{% endblock %}

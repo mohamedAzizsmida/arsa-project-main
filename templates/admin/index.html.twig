@@ -1,0 +1,205 @@
+{% extends 'Admin-base.html.twig' %}
+
+
+{% block body %}
+
+
+	<!-- ======== Preloader =========== -->
+	<div id="preloader">
+		<div class="spinner"></div>
+	</div>
+	<!-- ======== Preloader =========== -->
+
+	<!-- ======== sidebar-nav start =========no== -->
+	<aside class="sidebar-nav-wrapper">
+		<div class="navbar-logo">
+			<a href="{{ path('app_user_index') }}">
+				<img src="{{ asset('img/ecodon.png') }}" alt="logo" style="width: 120px; height: auto; max-height: 60px; object-fit: contain;"/>
+			</a>
+		</div>
+		<nav class="sidebar-nav">
+			<ul>
+				<span class="divider"><hr/></span>
+				<li class="nav-item">
+					<a href="{{ path('app_user_index') }}" class="nav-link">Gestion des Compte</a>
+				</li>
+				<li class="nav-item">
+					<a href="{{ path('admin_tables') }}" class="nav-link">Evenenements</a>
+				</li>
+				{# <li class="nav-item">
+					<a href="{{ path('app_blogs') }}" class="nav-link">
+						<span class="icon">
+							<svg width="20" height="20" viewbox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M1.66666 4.16667C1.66666 3.24619 2.41285 2.5 3.33332 2.5H16.6667C17.5872 2.5 18.3333 3.24619 18.3333 4.16667V9.16667C18.3333 10.0872 17.5872 10.8333 16.6667 10.8333H3.33332C2.41285 10.8333 1.66666 10.0872 1.66666 9.16667V4.16667Z"/>
+								<path d="M1.875 13.75C1.875 13.4048 2.15483 13.125 2.5 13.125H17.5C17.8452 13.125 18.125 13.4048 18.125 13.75C18.125 14.0952 17.8452 14.375 17.5 14.375H2.5C2.15483 14.375 1.875 14.0952 1.875 13.75Z"/>
+								<path d="M2.5 16.875C2.15483 16.875 1.875 17.1548 1.875 17.5C1.875 17.8452 2.15483 18.125 2.5 18.125H17.5C17.8452 18.125 18.125 17.8452 18.125 17.5C18.125 17.1548 17.8452 16.875 17.5 16.875H2.5Z"/>
+							</svg>
+						</span>
+						<span class="text">Liste des blogs</span>
+					</a>
+				</li> #}
+			</ul>
+		</nav>
+	</aside>
+	<div class="overlay"></div>
+	<!-- ======== sidebar-nav end =========== -->
+
+	<!-- ======== main-wrapper start =========== -->
+	<main
+		class="main-wrapper">
+		<!-- ========== header start ========== -->
+		<header class="header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-5 col-md-5 col-6"></div>
+					<div class="col-lg-7 col-md-7 col-6">
+						<div
+							class="header-right">
+							<!-- profile start -->
+							<div class="profile-box ml-15">
+								<button class="dropdown-toggle bg-transparent border-0" type="button" id="profile" data-bs-toggle="dropdown" aria-expanded="false">
+									<div class="profile-info">
+										<div class="info">
+											<div class="image">
+												<img src="{{ asset('admin_assets/images/profile/profile-image.png') }}" alt=""/>
+											</div>
+											<div>
+												<h6 class="fw-500">Adam Joe</h6>
+												<p>Admin</p>
+											</div>
+										</div>
+									</div>
+								</button>
+								<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profile">
+									<li>
+										<div class="author-info flex items-center !p-1">
+											<div class="image">
+												<img src="{{ asset('admin_assets/images/profile/profile-image.png') }}" alt="image">
+											</div>
+											<div class="content">
+												<h4 class="text-sm">Adam Joe</h4>
+												<a class="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white text-xs" href="#">Email@gmail.com</a>
+											</div>
+										</div>
+									</li>
+									<li class="divider"></li>
+									<li>
+										<a href="#0">
+											<i class="lni lni-user"></i>
+											View Profile
+										</a>
+									</li>
+									<li>
+										<a href="#0">
+											<i class="lni lni-alarm"></i>
+											Notifications
+										</a>
+									</li>
+									<li>
+										<a href="#0">
+											<i class="lni lni-inbox"></i>
+											Messages
+										</a>
+									</li>
+									<li>
+										<a href="#0">
+											<i class="lni lni-cog"></i>
+											Settings
+										</a>
+									</li>
+									<li class="divider"></li>
+									<li>
+										<a href="#0">
+											<i class="lni lni-exit"></i>
+											Sign Out
+										</a>
+									</li>
+								</ul>
+							</div>
+							<!-- profile end -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<!-- ========== header end ========== -->
+
+
+		{# <nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="#">Admin Panel</a>
+				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+					<a href="{{ path('app_user_ajout') }}" class="text-white text-decoration-none">Add User</a>
+				</button>
+
+			</div>
+		</nav> #}
+
+		<!-- ========== section Utilisateur ========== -->
+		<div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Téléphone</th>
+                            <th scope="col">Adresse</th>
+                            <th scope="col">Rôle</th>
+                            <th scope="col" class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.nom }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.tel }}</td>
+                                <td>{{ user.adress }}</td>
+								<td>
+    								<ul>
+        							{% for role in user.getRoles %}
+            							<li>{{ role }}</li>
+        							{% endfor %}
+    								</ul>
+								</td>                                
+								<td class="text-center">
+                                    <a href="{{ path('admin_edit_user', {'idUser': user.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
+                                    <form method="post" action="{{ path('app_user_delete', {'idUser': user.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">Aucun utilisateur trouvé</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+		<!-- ========== section end ========== -->
+	</main>
+	<!-- ======== main-wrapper end =========== -->
+	<!-- ========= All Javascript files linkup ======== -->
+	<script src="{{ asset('admin_assets/js/bootstrap.bundle.min.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/Chart.min.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/dynamic-pie-chart.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/moment.min.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/fullcalendar.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/jvectormap.min.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/world-merc.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/polyfill.js') }}"></script>
+	<script src="{{ asset('admin_assets/js/main.js') }}"></script>
+	<script></script>
+{% endblock %}

@@ -1,0 +1,18 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+homepage:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction
+    defaults:
+        path: /user
+        permanent: true
+app_login_google:
+    path: /login/google
+    controller: App\Controller\GoogleLoginController::redirectToGoogle
+
+app_login_google_callback:
+    path: /login/google/callback
+    controller: App\Controller\GoogleLoginController::handleGoogleCallback

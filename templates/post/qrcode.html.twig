@@ -1,0 +1,17 @@
+{% extends 'baseMain.html.twig' %}
+
+{% block title %}QR Code{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 text-center">
+                <h1 class="mb-4" style="color: #45a049; font-weight: bold; font-size: 2.5rem;">QR Code for Post: {{ post.contenu }}</h1>
+                <div class="qr-code-container" style="background-color: #f8f9fa; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-bottom: 30px;">
+                    <img src="{{ qrcode }}" alt="QR Code" class="img-fluid" style="max-width: 300px; border-radius: 8px;">
+                </div>
+                <p class="mt-4" style="font-size: 1.2rem; color: #555; line-height: 1.6;">Scan this QR code to view the post details.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
