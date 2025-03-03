@@ -223,6 +223,7 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
+
                 <li><a href="{{path('app_test')}}">Home</a></li>
                 <li><a href="{{path('app_eventspage')}}">Events</a></li>
                 <li><a href="{{path('app_contact')}}">Contact</a></li>
@@ -289,7 +290,7 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="{{path('app_login')}}" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fa fa-user"></i> Login</a>
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal"><i class="fa fa-user"></i> Login</a>
                             </div>
                         </div>
                     </div>
@@ -454,6 +455,7 @@
             
             chatToggle.addEventListener('click', () => {
                 chatbox.classList.toggle('show-chat');
+                console.log('Chat toggle button:');
             });
 
             chatClose.addEventListener('click', () => {
@@ -539,7 +541,7 @@
             }
         });
     </script>
-    
+
 <div class="chat-widget">
         <button id="chatToggle" class="chat-toggle">
             <i class="fa fa-comments"></i>
@@ -560,6 +562,30 @@
                 <button id="sendMessage">
                     <i class="fa fa-paper-plane"></i>
                 </button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="associationSelect" class="form-label">Select Association</label>
+                            <select class="form-select" id="associationSelect" required>
+                                <option value="" disabled selected>Select your association</option>
+                                {% for association in associations %}
+                                    <option value="{{ association.id }}">{{ association.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="loginButton">Login</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

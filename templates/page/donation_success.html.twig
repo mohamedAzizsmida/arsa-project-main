@@ -40,8 +40,35 @@
                                 {% endfor %}
                             </div>
                         {% endif %}
-                        <p class="total-amount">Total Amount: ${{ donation.amount }}</p>
-                        <p>Payment Method: {{ donation.payment_method|capitalize }}</p>
+                        
+                        {# Enhanced Certificate with logo instead of QR code #}
+                        <div class="mt-4 card p-4 bg-light">
+                            <h5 class="card-title text-success">Your Donation Certificate</h5>
+                            <p class="small text-muted mb-3">Official record of your contribution</p>
+                            
+                            <div class="row align-items-center">
+                                <div class="col-md-4 text-center mb-3 mb-md-0">
+                                    <div class="p-3 bg-white rounded shadow-sm d-inline-block">
+                                        <img src="{{ asset('img/ecodon.png') }}" alt="ARSA Logo" class="img-fluid" style="max-width: 150px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-8 text-left">
+                                    <h6 class="text-success">Certificate Details:</h6>
+                                    <table class="table table-sm">
+                                        <tr><th>Donator Name:</th><td>{{ donation.firstName|default('') }} {{ donation.lastName|default('') }}</td></tr>
+                                        <tr><th>Amount:</th><td>${{ donation.amount }}</td></tr>
+                                        <tr><th>Date:</th><td>{{ "now"|date('Y-m-d H:i:s') }}</td></tr>
+                                        <tr><th>Type:</th><td>{{ donation.type }}</td></tr>
+                                    </table>
+                                    <div class="text-center mt-3">
+                                        <span class="badge badge-success p-2"><i class="fa fa-check-circle"></i> Verified Donation</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center text-muted mt-3">
+                                <small>This certificate serves as proof of your generous contribution.</small>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="mt-4">

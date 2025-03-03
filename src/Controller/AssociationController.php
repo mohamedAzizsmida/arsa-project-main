@@ -27,11 +27,111 @@ final class AssociationController extends AbstractController
         $associationId = $session->get('association_id');
         $association = $entityManager->getRepository(Association::class)->find($associationId);
         $associations = $entityManager->getRepository(Association::class)->findAll();
+        
+        // Get analytics data
+        $eventRepository = $entityManager->getRepository(Event::class);
+        $donationRepository = $entityManager->getRepository(Donation::class);
+        
+        // Total events for this association
+        $totalEvents = $eventRepository->count(['association' => $associationId]);
+        
+        // Total donations related to this association's events
+        $events = $eventRepository->findBy(['association' => $associationId]);
+        $eventIds = array_map(function($event) { return $event->getId(); }, $events);
+        
+        // Initialize analytics data
+        $totalDonations = 0;
+        $totalDonationAmount = 0;
+        $donorCount = 0;
+        $recentDonations = [];
+        
+        // Calculate donation statistics if there are events
+        if (!empty($eventIds)) {
+            $donations = $donationRepository->createQueryBuilder('d')
+                ->where('d.event IN (:events)')
+                ->setParameter('events', $eventIds)
+                ->getQuery()
+                ->getResult();
+                
+            $totalDonations = count($donations);
+            $uniqueDonorEmails = [];
+            
+            foreach ($donations as $donation) {
+                $totalDonationAmount += (float)$donation->getDonationAmount();
+                if (!in_array($donation->getEmail(), $uniqueDonorEmails)) {
+                    $uniqueDonorEmails[] = $donation->getEmail();
+                    $donorCount++;
+                }
+            }
+            
+            // Get 5 most recent donations
+            $recentDonations = $donationRepository->createQueryBuilder('d')
+                ->where('d.event IN (:events)')
+                ->setParameter('events', $eventIds)
+                ->orderBy('d.createdAt', 'DESC')
+                ->setMaxResults(5)
+                ->getQuery()
+                ->getResult();
+        }
+        
+        // Get monthly donation totals for charts - Using PHP instead of DQL for date functions
+        $monthlyDonations = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $monthlyDonations[$i] = 0;
+        }
+        
+        $currentYear = date('Y');
+        
+        if (!empty($eventIds) && !empty($donations)) {
+            foreach ($donations as $donation) {
+                if ($donation->getCreatedAt() && $donation->getCreatedAt()->format('Y') == $currentYear) {
+                    $month = (int)$donation->getCreatedAt()->format('n');
+                    $monthlyDonations[$month] += (float)$donation->getDonationAmount();
+                }
+            }
+        }
+        
+        
+
+        $eventTypeCounts = [];
+
+        if (!empty($events)) {
+            foreach ($events as $event) {
+                $type = $event->getType() ?? 'Other';
+                
+                // Normalize the event type (clean it up)
+                $type = ucfirst(trim($type));
+                if (empty($type)) {
+                    $type = 'Other';
+                }
+                
+                // Count each event type
+                if (!isset($eventTypeCounts[$type])) {
+                    $eventTypeCounts[$type] = 0;
+                }
+                $eventTypeCounts[$type]++;
+            }
+        }
+        
+        // If no events found or all without types, add a default
+        if (empty($eventTypeCounts)) {
+            $eventTypeCounts['No Events'] = 1;
+        }
+        
+        // Sort by count descending
+        arsort($eventTypeCounts);
 
         return $this->render('association/index.html.twig', [
             'controller_name' => 'AssociationController',
             'association' => $association,
-            'associations' => $associations
+            'associations' => $associations,
+            'totalEvents' => $totalEvents,
+            'totalDonations' => $totalDonations,
+            'totalDonationAmount' => $totalDonationAmount,
+            'donorCount' => $donorCount,
+            'recentDonations' => $recentDonations,
+            'monthlyDonations' => array_values($monthlyDonations),
+            'eventTypeCounts' => $eventTypeCounts  
         ]);
     }
 

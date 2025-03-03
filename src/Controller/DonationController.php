@@ -104,9 +104,12 @@ class DonationController extends AbstractController
 
                 $session = $this->requestStack->getSession();
                 $session->set('last_donation', [
+                    'id' => $donation->getId(),
                     'amount' => $donationAmount,
                     'type' => $donationType,
                     'payment_method' => $request->request->get('payment_method'),
+                    'firstName' => $request->request->get('first_name'), 
+                    'lastName' => $request->request->get('last_name'),
                     'items' => $cartSummary['items'],
                     'event' => $donation->getEvent() ? [
                         'name' => $donation->getEvent()->getName(),

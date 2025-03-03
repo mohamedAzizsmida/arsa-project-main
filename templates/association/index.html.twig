@@ -199,25 +199,20 @@
             <!-- end row -->
           </div>
           <!-- ========== title-wrapper end ========== -->
-
-
-          
           <div class="row">
             <div class="col-xl-3 col-lg-4 col-sm-6">
               <div class="icon-card mb-30">
                 <div class="icon purple">
-                  <i class="lni lni-cart-full"></i>
+                  <i class="lni lni-calendar"></i>
                 </div>
                 <div class="content">
-                  <h6 class="mb-10">New Orders</h6>
-                  <h3 class="text-bold mb-10">34567</h3>
-                  <p class="text-sm text-success">
-                    <i class="lni lni-arrow-up"></i> +2.00%
-                    <span class="text-gray">(30 days)</span>
+                  <h6 class="mb-10">Total Events</h6>
+                  <h3 class="text-bold mb-10">{{ totalEvents }}</h3>
+                  <p class="text-sm">
+                    <span class="text-gray">Organized events</span>
                   </p>
                 </div>
               </div>
-              <!-- End Icon Cart -->
             </div>
             <!-- End Col -->
             <div class="col-xl-3 col-lg-4 col-sm-6">
@@ -226,77 +221,59 @@
                   <i class="lni lni-dollar"></i>
                 </div>
                 <div class="content">
-                  <h6 class="mb-10">Total Income</h6>
-                  <h3 class="text-bold mb-10">$74,567</h3>
-                  <p class="text-sm text-success">
-                    <i class="lni lni-arrow-up"></i> +5.45%
-                    <span class="text-gray">Increased</span>
+                  <h6 class="mb-10">Total Donations</h6>
+                  <h3 class="text-bold mb-10">{{ totalDonationAmount|number_format(2) }}</h3>
+                  <p class="text-sm">
+                    <span class="text-gray">{{ totalDonations }} donations received</span>
                   </p>
                 </div>
               </div>
-              <!-- End Icon Cart -->
             </div>
             <!-- End Col -->
             <div class="col-xl-3 col-lg-4 col-sm-6">
               <div class="icon-card mb-30">
                 <div class="icon primary">
-                  <i class="lni lni-credit-cards"></i>
+                  <i class="lni lni-users"></i>
                 </div>
                 <div class="content">
-                  <h6 class="mb-10">Total Expense</h6>
-                  <h3 class="text-bold mb-10">$24,567</h3>
-                  <p class="text-sm text-danger">
-                    <i class="lni lni-arrow-down"></i> -2.00%
-                    <span class="text-gray">Expense</span>
+                  <h6 class="mb-10">Total Donors</h6>
+                  <h3 class="text-bold mb-10">{{ donorCount }}</h3>
+                  <p class="text-sm">
+                    <span class="text-gray">Unique supporters</span>
                   </p>
                 </div>
               </div>
-              <!-- End Icon Cart -->
             </div>
             <!-- End Col -->
             <div class="col-xl-3 col-lg-4 col-sm-6">
               <div class="icon-card mb-30">
                 <div class="icon orange">
-                  <i class="lni lni-user"></i>
+                  <i class="lni lni-stats-up"></i>
                 </div>
                 <div class="content">
-                  <h6 class="mb-10">New User</h6>
-                  <h3 class="text-bold mb-10">34567</h3>
-                  <p class="text-sm text-danger">
-                    <i class="lni lni-arrow-down"></i> -25.00%
-                    <span class="text-gray"> Earning</span>
+                  <h6 class="mb-10">Avg. Per Donor</h6>
+                  <h3 class="text-bold mb-10">{{ donorCount > 0 ? (totalDonationAmount / donorCount)|number_format(2) : '0.00' }}</h3>
+                  <p class="text-sm">
+                    <span class="text-gray">Average donation</span>
                   </p>
                 </div>
               </div>
-              <!-- End Icon Cart -->
             </div>
             <!-- End Col -->
           </div>
-          <!-- End Row -->
+          
+          <!-- Chart Row -->
           <div class="row">
             <div class="col-lg-7">
               <div class="card-style mb-30">
-                <div class="title d-flex flex-wrap justify-content-between">
+                <div class="title d-flex flex-wrap align-items-center justify-content-between">
                   <div class="left">
-                    <h6 class="text-medium mb-10">Yearly Stats</h6>
-                    <h3 class="text-bold">$245,479</h3>
-                  </div>
-                  <div class="right">
-                    <div class="select-style-1">
-                      <div class="select-position select-sm">
-                        <select class="light-bg">
-                          <option value="">Yearly</option>
-                          <option value="">Monthly</option>
-                          <option value="">Weekly</option>
-                        </select>
-                      </div>
-                    </div>
-                    <!-- end select -->
+                    <h6 class="text-medium mb-2">Monthly Donations</h6>
                   </div>
                 </div>
                 <!-- End Title -->
                 <div class="chart">
-                  <canvas id="Chart1" style="width: 100%; height: 400px; margin-left: -35px;"></canvas>
+                  <canvas id="Chart1" style="width: 100%; height: 400px; margin-bottom: 15px;"></canvas>
                 </div>
                 <!-- End Chart -->
               </div>
@@ -306,415 +283,56 @@
               <div class="card-style mb-30">
                 <div class="title d-flex flex-wrap align-items-center justify-content-between">
                   <div class="left">
-                    <h6 class="text-medium mb-30">Sales/Revenue</h6>
+                    <h5 class="text-medium mb-2">Event Types Distribution</h5>
+                    <p class="text-sm text-muted">Analysis of event categories</p>
                   </div>
                   <div class="right">
                     <div class="select-style-1">
                       <div class="select-position select-sm">
-                        <select class="light-bg">
-                          <option value="">Yearly</option>
-                          <option value="">Monthly</option>
-                          <option value="">Weekly</option>
+                        <select class="light-bg" id="chartViewSelector">
+                          <option value="doughnut">Doughnut View</option>
+                          <option value="pie">Pie View</option>
+                          <option value="polarArea">Polar Area</option>
                         </select>
                       </div>
                     </div>
-                    <!-- end select -->
                   </div>
                 </div>
-                <!-- End Title -->
-                <div class="chart">
-                  <canvas id="Chart2" style="width: 100%; height: 400px; margin-left: -45px;"></canvas>
+                
+                <div class="chart-container position-relative" style="height:350px; margin-top: 20px;">
+                  <canvas id="eventTypesChart"></canvas>
                 </div>
-                <!-- End Chart -->
-              </div>
-            </div>
-            <!-- End Col -->
-          </div>
-          <!-- End Row -->
-          <div class="row">
-            <div class="col-lg-5">
-              <div class="card-style mb-30">
-                <div class="title d-flex justify-content-between align-items-center">
-                  <div class="left">
-                    <h6 class="text-medium mb-30">Sells by State</h6>
-                  </div>
-                </div>
-                <!-- End Title -->
-                <div id="map" style="width: 100%; height: 400px; overflow: hidden;"></div>
-                <p>Last updated: 7 days ago</p>
-              </div>
-            </div>
-            <!-- End Col -->
-            <div class="col-lg-7">
-              <div class="card-style mb-30">
-                <div class="title d-flex flex-wrap justify-content-between align-items-center">
-                  <div class="left">
-                    <h6 class="text-medium mb-30">Top Selling Products</h6>
-                  </div>
-                  <div class="right">
-                    <div class="select-style-1">
-                      <div class="select-position select-sm">
-                        <select class="light-bg">
-                          <option value="">Yearly</option>
-                          <option value="">Monthly</option>
-                          <option value="">Weekly</option>
-                        </select>
-                      </div>
+                
+                <div class="chart-legend-wrapper mt-3">
+                  <div class="d-flex flex-wrap justify-content-center" id="custom-legend">
+                    {% for type, count in eventTypeCounts %}
+                    <div class="legend-item d-flex align-items-center me-3 mb-2">
+                      <span class="legend-color" id="legend-color-{{ loop.index0 }}" style="width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 5px;"></span>
+                      <span class="legend-text text-sm">{{ type }} ({{ count }})</span>
                     </div>
-                    <!-- end select -->
+                    {% endfor %}
                   </div>
                 </div>
-                <!-- End Title -->
-                <div class="table-responsive">
-                  <table class="table top-selling-table">
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>
-                          <h6 class="text-sm text-medium">Products</h6>
-                        </th>
-                        <th class="min-width">
-                          <h6 class="text-sm text-medium">Category</h6>
-                        </th>
-                        <th class="min-width">
-                          <h6 class="text-sm text-medium">Price</h6>
-                        </th>
-                        <th class="min-width">
-                          <h6 class="text-sm text-medium">Sold</h6>
-                        </th>
-                        <th class="min-width">
-                          <h6 class="text-sm text-medium">Profit</h6>
-                        </th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <div class="check-input-primary">
-                            <input class="form-check-input" type="checkbox" id="checkbox-1" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-1.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">Arm Chair</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$345</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">43</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$45</p>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="check-input-primary">
-                            <input class="form-check-input" type="checkbox" id="checkbox-1" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-2.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">SOfa</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$145</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">13</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$15</p>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="check-input-primary">
-                            <input class="form-check-input" type="checkbox" id="checkbox-1" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-3.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">Dining Table</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$95</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">32</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$215</p>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="check-input-primary">
-                            <input class="form-check-input" type="checkbox" id="checkbox-1" />
-                          </div>
-                        </td>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-4.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">Office Chair</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$105</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">23</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$345</p>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <!-- End Table -->
+                
+                <div class="chart-info text-center mt-4">
+                  <p class="text-sm text-muted">
+                    
+                    Total of <strong>{{ eventTypeCounts|reduce((sum, count) => sum + count) }}</strong> events across <strong>{{ eventTypeCounts|length }}</strong> categories
+                  </p>
                 </div>
               </div>
             </div>
             <!-- End Col -->
           </div>
           <!-- End Row -->
+          
+          <!-- Recent Donations Table -->
           <div class="row">
-            <div class="col-lg-7">
+            <div class="col-lg-12">
               <div class="card-style mb-30">
                 <div class="title d-flex flex-wrap align-items-center justify-content-between">
                   <div class="left">
-                    <h6 class="text-medium mb-2">Sales Forecast</h6>
-                  </div>
-                  <div class="right">
-                    <div class="select-style-1 mb-2">
-                      <div class="select-position select-sm">
-                        <select class="light-bg">
-                          <option value="">Last Month</option>
-                          <option value="">Last 3 Months</option>
-                          <option value="">Last Year</option>
-                        </select>
-                      </div>
-                    </div>
-                    <!-- end select -->
-                  </div>
-                </div>
-                <!-- End Title -->
-                <div class="chart">
-                  <div id="legend3">
-                    <ul class="legend3 d-flex flex-wrap align-items-center mb-30">
-                      <li>
-                        <div class="d-flex">
-                          <span class="bg-color primary-bg"> </span>
-                          <div class="text">
-                            <p class="text-sm text-success">
-                              <span class="text-dark">Revenue</span> +25.55%
-                              <i class="lni lni-arrow-up"></i>
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="d-flex">
-                          <span class="bg-color purple-bg"></span>
-                          <div class="text">
-                            <p class="text-sm text-success">
-                              <span class="text-dark">Net Profit</span> +45.55%
-                              <i class="lni lni-arrow-up"></i>
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="d-flex">
-                          <span class="bg-color orange-bg"></span>
-                          <div class="text">
-                            <p class="text-sm text-danger">
-                              <span class="text-dark">Order</span> -4.2%
-                              <i class="lni lni-arrow-down"></i>
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <canvas id="Chart3" style="width: 100%; height: 450px; margin-left: -35px;"></canvas>
-                </div>
-              </div>
-            </div>
-            <!-- End Col -->
-            <div class="col-lg-5">
-              <div class="card-style mb-30">
-                <div class="title d-flex flex-wrap align-items-center justify-content-between">
-                  <div class="left">
-                    <h6 class="text-medium mb-2">Traffic</h6>
-                  </div>
-                  <div class="right">
-                    <div class="select-style-1 mb-2">
-                      <div class="select-position select-sm">
-                        <select class="bg-ligh">
-                          <option value="">Last 6 Months</option>
-                          <option value="">Last 3 Months</option>
-                          <option value="">Last Year</option>
-                        </select>
-                      </div>
-                    </div>
-                    <!-- end select -->
-                  </div>
-                </div>
-                <!-- End Title -->
-                <div class="chart">
-                  <div id="legend4">
-                    <ul class="legend3 d-flex flex-wrap gap-3 gap-sm-0 align-items-center mb-30">
-                      <li>
-                        <div class="d-flex">
-                          <span class="bg-color primary-bg"> </span>
-                          <div class="text">
-                            <p class="text-sm text-success">
-                              <span class="text-dark">Store Visits</span>
-                              +25.55%
-                              <i class="lni lni-arrow-up"></i>
-                            </p>
-                            <h2>3456</h2>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="d-flex">
-                          <span class="bg-color danger-bg"></span>
-                          <div class="text">
-                            <p class="text-sm text-danger">
-                              <span class="text-dark">Visitors</span> -2.05%
-                              <i class="lni lni-arrow-down"></i>
-                            </p>
-                            <h2>3456</h2>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <canvas id="Chart4" style="width: 100%; height: 420px; margin-left: -35px;"></canvas>
-                </div>
-                <!-- End Chart -->
-              </div>
-            </div>
-            <!-- End Col -->
-          </div>
-          <!-- End Row -->
-          <div class="row">
-            <div class="col-lg-5">
-              <div class="card-style calendar-card mb-30">
-                <div id="calendar-mini"></div>
-              </div>
-            </div>
-            <!-- End Col -->
-            <div class="col-lg-7">
-              <div class="card-style mb-30">
-                <div class="title d-flex flex-wrap align-items-center justify-content-between">
-                  <div class="left">
-                    <h6 class="text-medium mb-30">Sales History</h6>
-                  </div>
-                  <div class="right">
-                    <div class="select-style-1">
-                      <div class="select-position select-sm">
-                        <select class="light-bg">
-                          <option value="">Today</option>
-                          <option value="">Yesterday</option>
-                        </select>
-                      </div>
-                    </div>
-                    <!-- end select -->
+                    <h6 class="text-medium mb-30">Recent Donations</h6>
                   </div>
                 </div>
                 <!-- End Title -->
@@ -723,191 +341,56 @@
                     <thead>
                       <tr>
                         <th>
-                          <h6 class="text-sm text-medium">Products</h6>
+                          <h6 class="text-sm text-medium">Donor</h6>
                         </th>
                         <th class="min-width">
-                          <h6 class="text-sm text-medium">
-                            Category <i class="lni lni-arrows-vertical"></i>
-                          </h6>
+                          <h6 class="text-sm text-medium">Event</h6>
                         </th>
                         <th class="min-width">
-                          <h6 class="text-sm text-medium">
-                            Revenue <i class="lni lni-arrows-vertical"></i>
-                          </h6>
+                          <h6 class="text-sm text-medium">Amount</h6>
                         </th>
                         <th class="min-width">
-                          <h6 class="text-sm text-medium">
-                            Status <i class="lni lni-arrows-vertical"></i>
-                          </h6>
-                        </th>
-                        <th>
-                          <h6 class="text-sm text-medium text-end">
-                            Actions <i class="lni lni-arrows-vertical"></i>
-                          </h6>
+                          <h6 class="text-sm text-medium">Date</h6>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-1.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">Bedroom</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$345</p>
-                        </td>
-                        <td>
-                          <span class="status-btn close-btn">Pending</span>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="edit">
-                              <i class="lni lni-pencil"></i>
-                            </button>
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-2.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">Arm Chair</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$345</p>
-                        </td>
-                        <td>
-                          <span class="status-btn warning-btn">Refund</span>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="edit">
-                              <i class="lni lni-pencil"></i>
-                            </button>
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-3.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">Sofa</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$345</p>
-                        </td>
-                        <td>
-                          <span class="status-btn success-btn">Completed</span>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="edit">
-                              <i class="lni lni-pencil"></i>
-                            </button>
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="product">
-                            <div class="image">
-                              <img src="{{ asset('admin_assets/images/products/product-mini-4.jpg') }}" alt="" />
-                            </div>
-                            <p class="text-sm">Kitchen</p>
-                          </div>
-                        </td>
-                        <td>
-                          <p class="text-sm">Interior</p>
-                        </td>
-                        <td>
-                          <p class="text-sm">$345</p>
-                        </td>
-                        <td>
-                          <span class="status-btn close-btn">Canceled</span>
-                        </td>
-                        <td>
-                          <div class="action justify-content-end">
-                            <button class="edit">
-                              <i class="lni lni-pencil"></i>
-                            </button>
-                            <button class="more-btn ml-10 dropdown-toggle" id="moreAction1" data-bs-toggle="dropdown"
-                              aria-expanded="false">
-                              <i class="lni lni-more-alt"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreAction1">
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Remove</a>
-                              </li>
-                              <li class="dropdown-item">
-                                <a href="#0" class="text-gray">Edit</a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-                      </tr>
+                      {% if recentDonations|length > 0 %}
+                        {% for donation in recentDonations %}
+                          <tr>
+                            <td>
+                              <div class="donor">
+                                <div class="image">
+                                  <img src="{{ asset('admin_assets/images/profile/profile-image.png') }}" alt="" />
+                                </div>
+                                <p class="text-sm">{{ donation.firstName }} {{ donation.lastName }}</p>
+                              </div>
+                            </td>
+                            <td>
+                              <p class="text-sm">{{ donation.event.name }}</p>
+                            </td>
+                            <td>
+                              <p class="text-sm">{{ donation.donationAmount }}</p>
+                            </td>
+                            <td>
+                              <p class="text-sm">{{ donation.createdAt ? donation.createdAt|date("Y-m-d") : 'Unknown' }}</p>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      {% else %}
+                        <tr>
+                          <td colspan="4" class="text-center">No donations yet</td>
+                        </tr>
+                      {% endif %}
                     </tbody>
                   </table>
-                  <!-- End Table -->
                 </div>
               </div>
             </div>
-            <!-- End Col -->
           </div>
+          <!-- End Row -->
+        
+
           <!-- End Row -->
         </div>
         <!-- end container -->
@@ -917,7 +400,8 @@
       
     </main>
     <!-- ======== main-wrapper end =========== -->
-
+{% endblock %}
+{% block javascripts %}
     <!-- ========= All Javascript files linkup ======== -->
     <script src="{{ asset('admin_assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('admin_assets/js/Chart.min.js') }}"></script>
@@ -929,587 +413,287 @@
     <script src="{{ asset('admin_assets/js/polyfill.js') }}"></script>
     <script src="{{ asset('admin_assets/js/main.js') }}"></script>
 
-    <script>
-      // ======== jvectormap activation
-      var markers = [
-        { name: "Egypt", coords: [26.8206, 30.8025] },
-        { name: "Russia", coords: [61.524, 105.3188] },
-        { name: "Canada", coords: [56.1304, -106.3468] },
-        { name: "Greenland", coords: [71.7069, -42.6043] },
-        { name: "Brazil", coords: [-14.235, -51.9253] },
-      ];
 
-      var jvm = new jsVectorMap({
-        map: "world_merc",
-        selector: "#map",
-        zoomButtons: true,
 
-        regionStyle: {
-          initial: {
-            fill: "#d1d5db",
-          },
-        },
 
-        labels: {
-          markers: {
-            render: (marker) => marker.name,
-          },
-        },
 
-        markersSelectable: true,
-        selectedMarkers: markers.map((marker, index) => {
-          var name = marker.name;
-
-          if (name === "Russia" || name === "Brazil") {
-            return index;
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // =========== chart one start (Monthly Donations)
+    const ctx1 = document.getElementById("Chart1").getContext("2d");
+    const chart1 = new Chart(ctx1, {
+      type: "line",
+      data: {
+        labels: [
+          "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ],
+        datasets: [
+          {
+            label: "Monthly Donations",
+            backgroundColor: "rgba(54, 92, 245, 0.2)",
+            borderColor: "#365CF5",
+            data: {{ monthlyDonations|json_encode|raw }},
+            pointBackgroundColor: "#365CF5",
+            pointHoverBackgroundColor: "#365CF5",
+            pointBorderColor: "#365CF5",
+            pointHoverBorderColor: "#fff",
+            pointHoverBorderWidth: 3,
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            fill: true,
+            tension: 0.4,
           }
-        }),
-        markers: markers,
-        markerStyle: {
-          initial: { fill: "#4A6CF7" },
-          selected: { fill: "#ff5050" },
-        },
-        markerLabelStyle: {
-          initial: {
-            fontWeight: 400,
-            fontSize: 14,
-          },
-        },
-      });
-      // ====== calendar activation
-      document.addEventListener("DOMContentLoaded", function () {
-        var calendarMiniEl = document.getElementById("calendar-mini");
-        var calendarMini = new FullCalendar.Calendar(calendarMiniEl, {
-          initialView: "dayGridMonth",
-          headerToolbar: {
-            end: "today prev,next",
-          },
-        });
-        calendarMini.render();
-      });
-
-      // =========== chart one start
-      const ctx1 = document.getElementById("Chart1").getContext("2d");
-      const chart1 = new Chart(ctx1, {
-        type: "line",
-        data: {
-          labels: [
-            "Jan",
-            "Fab",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          datasets: [
-            {
-              label: "",
-              backgroundColor: "transparent",
-              borderColor: "#365CF5",
-              data: [
-                600, 800, 750, 880, 940, 880, 900, 770, 920, 890, 976, 1100,
-              ],
-              pointBackgroundColor: "transparent",
-              pointHoverBackgroundColor: "#365CF5",
-              pointBorderColor: "transparent",
-              pointHoverBorderColor: "#fff",
-              pointHoverBorderWidth: 5,
-              borderWidth: 5,
-              pointRadius: 8,
-              pointHoverRadius: 8,
-              cubicInterpolationMode: "monotone", // Add this line for curved line
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            tooltip: {
-              callbacks: {
-                labelColor: function (context) {
-                  return {
-                    backgroundColor: "#ffffff",
-                    color: "#171717"
-                  };
-                },
-              },
-              intersect: false,
-              backgroundColor: "#f9f9f9",
-              title: {
-                fontFamily: "Plus Jakarta Sans",
-                color: "#8F92A1",
-                fontSize: 12,
-              },
-              body: {
-                fontFamily: "Plus Jakarta Sans",
-                color: "#171717",
-                fontStyle: "bold",
-                fontSize: 16,
-              },
-              multiKeyBackground: "transparent",
-              displayColors: false,
-              padding: {
-                x: 30,
-                y: 10,
-              },
-              bodyAlign: "center",
-              titleAlign: "center",
-              titleColor: "#8F92A1",
-              bodyColor: "#171717",
-              bodyFont: {
-                family: "Plus Jakarta Sans",
-                size: "16",
-                weight: "bold",
-              },
-            },
-            legend: {
-              display: false,
-            },
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          title: {
-            display: false,
-          },
-          scales: {
-            y: {
-              grid: {
-                display: false,
-                drawTicks: false,
-                drawBorder: false,
-              },
-              ticks: {
-                padding: 35,
-                max: 1200,
-                min: 500,
-              },
-            },
-            x: {
-              grid: {
-                drawBorder: false,
-                color: "rgba(143, 146, 161, .1)",
-                zeroLineColor: "rgba(143, 146, 161, .1)",
-              },
-              ticks: {
-                padding: 20,
-              },
-            },
-          },
-        },
-      });
-      // =========== chart one end
-
-      // =========== chart two start
-      const ctx2 = document.getElementById("Chart2").getContext("2d");
-      const chart2 = new Chart(ctx2, {
-        type: "bar",
-        data: {
-          labels: [
-            "Jan",
-            "Fab",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          datasets: [
-            {
-              label: "",
-              backgroundColor: "#365CF5",
-              borderRadius: 30,
-              barThickness: 6,
-              maxBarThickness: 8,
-              data: [
-                600, 700, 1000, 700, 650, 800, 690, 740, 720, 1120, 876, 900,
-              ],
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            tooltip: {
-              callbacks: {
-                titleColor: function (context) {
-                  return "#8F92A1";
-                },
-                label: function (context) {
-                  let label = context.dataset.label || "";
-
-                  if (label) {
-                    label += ": ";
-                  }
-                  label += context.parsed.y;
-                  return label;
-                },
-              },
-              backgroundColor: "#F3F6F8",
-              titleAlign: "center",
-              bodyAlign: "center",
-              titleFont: {
-                size: 12,
-                weight: "bold",
-                color: "#8F92A1",
-              },
-              bodyFont: {
-                size: 16,
-                weight: "bold",
-                color: "#171717",
-              },
-              displayColors: false,
-              padding: {
-                x: 30,
-                y: 10,
-              },
-          },
-          },
+        ],
+      },
+      options: {
+        plugins: {
           legend: {
-            display: false,
-            },
-          legend: {
-            display: false,
+            display: false
           },
-          layout: {
-            padding: {
-              top: 15,
-              right: 15,
-              bottom: 15,
-              left: 15,
-            },
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              grid: {
-                display: false,
-                drawTicks: false,
-                drawBorder: false,
-              },
-              ticks: {
-                padding: 35,
-                max: 1200,
-                min: 0,
-              },
-            },
-            x: {
-              grid: {
-                display: false,
-                drawBorder: false,
-                color: "rgba(143, 146, 161, .1)",
-                drawTicks: false,
-                zeroLineColor: "rgba(143, 146, 161, .1)",
-              },
-              ticks: {
-                padding: 20,
-              },
-            },
-          },
-          plugins: {
-            legend: {
-              display: false,
-            },
-            title: {
-              display: false,
-            },
-          },
-        },
-      });
-      // =========== chart two end
-
-      // =========== chart three start
-      const ctx3 = document.getElementById("Chart3").getContext("2d");
-      const chart3 = new Chart(ctx3, {
-        type: "line",
-        data: {
-          labels: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ],
-          datasets: [
-            {
-              label: "Revenue",
-              backgroundColor: "transparent",
-              borderColor: "#365CF5",
-              data: [80, 120, 110, 100, 130, 150, 115, 145, 140, 130, 160, 210],
-              pointBackgroundColor: "transparent",
-              pointHoverBackgroundColor: "#365CF5",
-              pointBorderColor: "transparent",
-              pointHoverBorderColor: "#365CF5",
-              pointHoverBorderWidth: 3,
-              pointBorderWidth: 5,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-              fill: false,
-              tension: 0.4,
-            },
-            {
-              label: "Profit",
-              backgroundColor: "transparent",
-              borderColor: "#9b51e0",
-              data: [
-                120, 160, 150, 140, 165, 210, 135, 155, 170, 140, 130, 200,
-              ],
-              pointBackgroundColor: "transparent",
-              pointHoverBackgroundColor: "#9b51e0",
-              pointBorderColor: "transparent",
-              pointHoverBorderColor: "#9b51e0",
-              pointHoverBorderWidth: 3,
-              pointBorderWidth: 5,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-              fill: false,
-              tension: 0.4,
-            },
-            {
-              label: "Order",
-              backgroundColor: "transparent",
-              borderColor: "#f2994a",
-              data: [180, 110, 140, 135, 100, 90, 145, 115, 100, 110, 115, 150],
-              pointBackgroundColor: "transparent",
-              pointHoverBackgroundColor: "#f2994a",
-              pointBorderColor: "transparent",
-              pointHoverBorderColor: "#f2994a",
-              pointHoverBorderWidth: 3,
-              pointBorderWidth: 5,
-              pointRadius: 5,
-              pointHoverRadius: 8,
-              fill: false,
-              tension: 0.4,
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            tooltip: {
-              intersect: false,
-              backgroundColor: "#fbfbfb",
-              titleColor: "#8F92A1",
-              bodyColor: "#272727",
-              titleFont: {
-                size: 16,
-                family: "Plus Jakarta Sans",
-                weight: "400",
-              },
-              bodyFont: {
-                family: "Plus Jakarta Sans",
-                size: 16,
-              },
-              multiKeyBackground: "transparent",
-              displayColors: false,
-              padding: {
-                x: 30,
-                y: 15,
-              },
-              borderColor: "rgba(143, 146, 161, .1)",
-              borderWidth: 1,
-              enabled: true,
-            },
-            title: {
-              display: false,
-            },
-            legend: {
-              display: false,
-            },
-          },
-          layout: {
-            padding: {
-              top: 0,
-            },
-          },
-          responsive: true,
-          // maintainAspectRatio: false,
-          legend: {
-            display: false,
-          },
-          scales: {
-            y: {
-              grid: {
-                display: false,
-                drawTicks: false,
-                drawBorder: false,
-              },
-              ticks: {
-                padding: 35,
-              },
-              max: 350,
-              min: 50,
-            },
-            x: {
-              grid: {
-                drawBorder: false,
-                color: "rgba(143, 146, 161, .1)",
-                drawTicks: false,
-                zeroLineColor: "rgba(143, 146, 161, .1)",
-              },
-              ticks: {
-                padding: 20,
-              },
-            },
-          },
-        },
-      });
-      // =========== chart three end
-
-      // ================== chart four start
-      const ctx4 = document.getElementById("Chart4").getContext("2d");
-      const chart4 = new Chart(ctx4, {
-        type: "bar",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-          datasets: [
-            {
-              label: "",
-              backgroundColor: "#365CF5",
-              borderColor: "transparent",
-              borderRadius: 20,
-              borderWidth: 5,
-              barThickness: 20,
-              maxBarThickness: 20,
-              data: [600, 700, 1000, 700, 650, 800],
-            },
-            {
-              label: "",
-              backgroundColor: "#d50100",
-              borderColor: "transparent",
-              borderRadius: 20,
-              borderWidth: 5,
-              barThickness: 20,
-              maxBarThickness: 20,
-              data: [690, 740, 720, 1120, 876, 900],
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            tooltip: {
-              backgroundColor: "#F3F6F8",
-              titleColor: "#8F92A1",
-              titleFontSize: 12,
-              bodyColor: "#171717",
-              bodyFont: {
-                weight: "bold",
-                size: 16,
-              },
-              multiKeyBackground: "transparent",
-              displayColors: false,
-              padding: {
-                x: 30,
-                y: 10,
-              },
-              bodyAlign: "center",
-              titleAlign: "center",
-              enabled: true,
-            },
-            legend: {
-              display: false,
-            },
-          },
-          layout: {
-            padding: {
-              top: 0,
-            },
-          },
-          responsive: true,
-          // maintainAspectRatio: false,
-          title: {
-            display: false,
-          },
-          scales: {
-            y: {
-              grid: {
-                display: false,
-                drawTicks: false,
-                drawBorder: false,
-              },
-              ticks: {
-                padding: 35,
-                max: 1200,
-                min: 0,
-              },
-            },
-            x: {
-              grid: {
-                display: false,
-                drawBorder: false,
-                color: "rgba(143, 146, 161, .1)",
-                zeroLineColor: "rgba(143, 146, 161, .1)",
-              },
-              ticks: {
-                padding: 20,
-              },
-            },
-          },
-        },
-      });
-        // =========== chart four end
-        document.addEventListener('DOMContentLoaded', function() {
-          var profileDropdown = document.getElementById('profile');
-          if (profileDropdown) {
-              profileDropdown.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  var dropdown = new bootstrap.Dropdown(profileDropdown);
-                  dropdown.toggle();
-              });
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': ' + context.parsed.y;
+              }
+            }
           }
-      });
-      // Menu toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('menu-toggle');
-            const sidebar = document.querySelector('.sidebar-nav-wrapper');
-            const overlay = document.querySelector('.overlay');
-            const mainWrapper = document.querySelector('.main-wrapper');
-
-            function toggleMenu() {
-                sidebar.classList.toggle('collapsed');
-                overlay.classList.toggle('active');
-                mainWrapper.classList.toggle('active');
+        },
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: "#F3F6F8",
+            },
+            ticks: {
+              callback: function(value) {
+                return value;
+              }
             }
-
-            if (menuToggle) {
-                menuToggle.addEventListener('click', toggleMenu);
+          },
+          x: {
+            grid: {
+              display: false
             }
+          }
+        }
+      }
+    });
 
-            if (overlay) {
-                overlay.addEventListener('click', toggleMenu);
+    // =========== chart two start (Donation Types)
+    const ctx2 = document.getElementById("Chart2").getContext("2d");
+    const chart2 = new Chart(ctx2, {
+      type: "doughnut",
+      data: {
+        labels: ["Event Access", "Money", "Clothes", "Food", "Other"],
+        datasets: [
+          {
+            data: [
+              {{ eventDonationCounts.eventAccess|default(0) }},
+              {{ eventDonationCounts.money|default(0) }},
+              {{ eventDonationCounts.clothes|default(0) }},
+              {{ eventDonationCounts.food|default(0) }},
+              {{ eventDonationCounts.other|default(0) }}
+            ],
+            backgroundColor: [
+              "#365CF5",
+              "#9b51e0",
+              "#f2994a",
+              "#4CAF50",
+              "#F44336"
+            ],
+            borderWidth: 0,
+            label: "Donation Types"
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: {
+              boxWidth: 15,
+              padding: 20
             }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = Math.round((context.parsed / total) * 100);
+                return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+  });
 
-            // Close sidebar when clicking outside
-            document.addEventListener('click', function(event) {
-                if (!sidebar.contains(event.target) && !menuToggle.contains(event.target) && !sidebar.classList.contains('collapsed')) {
-                    toggleMenu();
-                }
-            });
 
-            // Dropdown functionality
-            var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'))
-            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-                return new bootstrap.Dropdown(dropdownToggleEl)
-            });
-        });
-         
+ document.addEventListener('DOMContentLoaded', function() {
+  // Define a color palette with gradients
+  const colorPalettes = {
+    solid: [
+      '#4CAF50', '#2196F3', '#FFC107', '#E91E63', '#9C27B0', 
+      '#FF5722', '#3F51B5', '#00BCD4', '#8BC34A', '#795548'
+    ],
+    gradient: [
+      ['#43a047', '#76d275'], // green
+      ['#1976d2', '#64b5f6'], // blue
+      ['#ffb300', '#ffe082'], // amber
+      ['#d81b60', '#f48fb1'], // pink
+      ['#7b1fa2', '#ba68c8'], // purple
+      ['#e64a19', '#ff8a65'], // deep orange
+      ['#303f9f', '#7986cb'], // indigo
+      ['#0097a7', '#4dd0e1'], // cyan
+      ['#689f38', '#aed581'], // light green
+      ['#5d4037', '#a1887f']  // brown
+    ]
+  };
 
-    </script>
-   
+  // Extract event types data
+  const labels = [];
+  const data = [];
   
+  {% for type, count in eventTypeCounts %}
+    labels.push('{{ type }}');
+    data.push({{ count }});
+  {% endfor %}
+
+  // Create gradient backgrounds
+  const ctx = document.getElementById('eventTypesChart').getContext('2d');
+  const gradientBackgrounds = colorPalettes.gradient.map((colors, i) => {
+    if (i >= data.length) return null;
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, colors[0]);
+    gradient.addColorStop(1, colors[1]);
+    return gradient;
+  }).filter(bg => bg !== null);
+  
+  // Update legend colors
+  colorPalettes.gradient.forEach((colors, i) => {
+    const legendColor = document.getElementById(`legend-color-${i}`);
+    if (legendColor) {
+      legendColor.style.backgroundColor = colors[0];
+    }
+  });
+
+  // Load saved preference or use default
+  const savedChartType = localStorage.getItem('preferredChartType') || 'doughnut';
+  const chartSelector = document.getElementById('chartViewSelector');
+  if (chartSelector) {
+    chartSelector.value = savedChartType;
+  }
+  
+  // Create the chart configuration
+  const chartOptions = {
+    type: savedChartType,
+    data: {
+      labels: labels,
+      datasets: [{
+        data: data,
+        backgroundColor: gradientBackgrounds,
+        borderColor: colorPalettes.solid.slice(0, data.length),
+        borderWidth: 2,
+        hoverBorderWidth: 4,
+        hoverBorderColor: '#fff',
+        hoverOffset: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {
+        padding: 20
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          titleColor: '#000',
+          bodyColor: '#333',
+          bodyFont: {
+            size: 14
+          },
+          padding: 12,
+          cornerRadius: 8,
+          boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.raw;
+              const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+              const percentage = Math.round((value / total) * 100);
+              return `${label}: ${value} events (${percentage}%)`;
+            }
+          }
+        }
+      },
+      animation: {
+        animateScale: true,
+        animateRotate: true,
+        duration: 2000,
+        easing: 'easeOutQuart'
+      }
+    }
+  };
+
+  // Adjust specific options based on chart type
+  if (savedChartType === 'polarArea') {
+    chartOptions.options.scales = {
+      r: {
+        ticks: {
+          display: false
+        }
+      }
+    };
+  } else {
+    chartOptions.options.cutout = savedChartType === 'doughnut' ? '60%' : undefined;
+  }
+
+  // Create the initial chart
+  let eventTypesChart = new Chart(ctx, chartOptions);
+  
+  // Chart type switcher
+  const chartViewSelector = document.getElementById('chartViewSelector');
+  if (chartViewSelector) {
+    chartViewSelector.addEventListener('change', function(e) {
+      const newChartType = e.target.value;
+      
+      // Store the current selected value in localStorage
+      localStorage.setItem('preferredChartType', newChartType);
+      
+      // Destroy the existing chart
+      eventTypesChart.destroy();
+      
+      // Update chart configuration
+      chartOptions.type = newChartType;
+      
+      // Adjust specific options based on chart type
+      if (newChartType === 'polarArea') {
+        chartOptions.options.scales = {
+          r: {
+            ticks: {
+              display: false
+            }
+          }
+        };
+        chartOptions.options.cutout = undefined;
+      } else {
+        chartOptions.options.scales = {};
+        chartOptions.options.cutout = newChartType === 'doughnut' ? '60%' : undefined;
+      }
+      
+      // Create new chart and reassign to variable
+      eventTypesChart = new Chart(ctx, chartOptions);
+    });
+  }
+});
+</script>
 {% endblock %}

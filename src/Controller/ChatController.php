@@ -42,22 +42,19 @@ class ChatController extends AbstractController
         } catch (\Exception $e) {
             error_log('ChatBot Error: ' . $e->getMessage());
             
+            // More detailed error for debugging
             return new JsonResponse([
                 'success' => false,
                 'message' => 'An error occurred. Please try again.',
-                'debug' => $e->getMessage()
+                'debug' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ], 500);
         }
     }
 
-    #[Route('/chat/test', name: 'chat_test')]
-    public function testApi(): JsonResponse
-    {
-        try {
-            $response = $this->gemini->askQuestion('test');
-            return new JsonResponse(['success' => true, 'message' => $response]);
-        } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], 500);
-        }
-    }
+
+
+    
+
+   
 }
